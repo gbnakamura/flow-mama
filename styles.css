@@ -1497,6 +1497,9 @@ ul { list-style: none; }
     aspect-ratio: 4/3;
     max-height: 400px;
   }
+  .classes__image img {
+    object-position: center 65%;
+  }
 
   .parts {
     grid-template-columns: 1fr;
