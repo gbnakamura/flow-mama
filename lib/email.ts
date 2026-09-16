@@ -13,11 +13,16 @@ function escapeHtml(value: string) {
   })[character] ?? character);
 }
 
-const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {
+const dateFormatter = new Intl.DateTimeFormat("en-GB", {
   timeZone: "Europe/London",
   weekday: "long",
   day: "numeric",
   month: "long",
+  year: "numeric",
+});
+
+const timeFormatter = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Europe/London",
   hour: "2-digit",
   minute: "2-digit",
   hour12: false,
@@ -52,7 +57,7 @@ export async function sendBookingConfirmation(orderId: string) {
   const slotIds = (bookings ?? []).map((booking) => booking.slot_id);
   const { data: slots, error: slotsError } = await supabase
     .from("slots")
-    .select("id, starts_at, session_variants(name)")
+    .select("id, starts_at, ends_at, session_variants(name)")
     .in("id", slotIds)
     .order("starts_at", { ascending: true });
   if (slotsError) throw new Error(`Unable to load confirmation dates: ${slotsError.message}`);
@@ -60,10 +65,14 @@ export async function sendBookingConfirmation(orderId: string) {
   const dateItems = (slots ?? []).map((slot) => {
     const variant = Array.isArray(slot.session_variants) ? slot.session_variants[0] : slot.session_variants;
     const variantName = variant && "name" in variant ? String(variant.name) : "Flow Mama";
-    return `<li style="margin:0 0 8px"><strong>${escapeHtml(variantName)}</strong> — ${escapeHtml(dateTimeFormatter.format(new Date(slot.starts_at)))}</li>`;
+    const date = dateFormatter.format(new Date(slot.starts_at));
+    const time = `${timeFormatter.format(new Date(slot.starts_at))}–${timeFormatter.format(new Date(slot.ends_at))}`;
+    return `<li style="margin:0 0 10px"><strong>${escapeHtml(variantName)}</strong><br>${escapeHtml(date)} · ${escapeHtml(time)}</li>`;
   }).join("");
 
   const total = new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format((order.total_pence ?? 0) / 100);
+  const location = programme.location ?? "Northfields Community Centre, W13 9SS";
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
     from,
@@ -76,7 +85,9 @@ export async function sendBookingConfirmation(orderId: string) {
         <p>We can’t wait to welcome you and ${escapeHtml(customer.baby_name)} to Flow Mama.</p>
         <h2 style="font-size:18px;margin-top:28px">Your classes</h2>
         <ul style="padding-left:20px">${dateItems}</ul>
-        <p><strong>Location:</strong> ${escapeHtml(programme.location ?? "Northfields Community Centre, W13 9SS")}</p>
+        <h2 style="font-size:18px;margin-top:28px">Venue</h2>
+        <p><strong>${escapeHtml(location)}</strong><br><a href="${escapeHtml(mapsUrl)}" style="color:#d96d5f">Open in Google Maps</a></p>
+        <p>Each session includes 45 minutes of movement followed by 45 minutes of coffee and chat. Mats and props are provided, along with coffee, tea and snacks.</p>
         <p><strong>Total paid:</strong> ${escapeHtml(total)}</p>
         <p style="margin-top:30px">Questions or changes? Reply to this email and Amber will help.</p>
       </div>
