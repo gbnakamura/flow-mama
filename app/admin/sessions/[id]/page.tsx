@@ -52,7 +52,8 @@ async function addManualBooking(formData: FormData) {
     p_payment_type: String(formData.get("paymentType") ?? "payment_due"),
     p_admin_email: admin.email,
   });
-  if (error || !data?.ok) redirect(`/admin/sessions/${slotId}?error=add`);
+  if (error) redirect(`/admin/sessions/${slotId}?error=add`);
+  if (!data?.ok) redirect(`/admin/sessions/${slotId}?error=${data?.reason === "capacity_unavailable" ? "full" : "add"}`);
   revalidatePath(`/admin/sessions/${slotId}`);
   redirect(`/admin/sessions/${slotId}?result=added`);
 }
@@ -94,21 +95,31 @@ export default async function SessionDetailPage({ params, searchParams }: Sessio
     .single();
   if (slotError || !slot) redirect("/admin");
 
-  const [{ data: bookingRows }, { data: otherRows }] = await Promise.all([
-    supabase
+  let { data: bookingRows, error: bookingError } = await supabase
+    .from("bookings")
+    .select("id, source, manual_payment_type, baby_name, baby_age_months, customer_id, order_id, customers(full_name,email,phone,baby_name,baby_age_months), orders(total_pence,status,quantity)")
+    .eq("slot_id", id)
+    .eq("status", "confirmed")
+    .order("created_at", { ascending: true });
+  if (bookingError?.code === "42703") {
+    const fallback = await supabase
       .from("bookings")
       .select("id, source, manual_payment_type, customer_id, order_id, customers(full_name,email,phone,baby_name,baby_age_months), orders(total_pence,status,quantity)")
       .eq("slot_id", id)
       .eq("status", "confirmed")
-      .order("created_at", { ascending: true }),
-    supabase
-      .from("slots")
-      .select("id, starts_at, capacity, booked_count, session_variants(name)")
-      .neq("id", id)
-      .eq("status", "scheduled")
-      .gt("starts_at", new Date().toISOString())
-      .order("starts_at", { ascending: true }),
-  ]);
+      .order("created_at", { ascending: true });
+    bookingRows = (fallback.data ?? []).map((row) => ({ ...row, baby_name: null, baby_age_months: null })) as typeof bookingRows;
+    bookingError = fallback.error;
+  }
+  if (bookingError) throw new Error(`Unable to load bookings: ${bookingError.message}`);
+
+  const { data: otherRows } = await supabase
+    .from("slots")
+    .select("id, starts_at, capacity, booked_count, session_variants(name)")
+    .neq("id", id)
+    .eq("status", "scheduled")
+    .gt("starts_at", new Date().toISOString())
+    .order("starts_at", { ascending: true });
 
   const variant = Array.isArray(slot.session_variants) ? slot.session_variants[0] : slot.session_variants;
   const bookings = (bookingRows ?? []).map((row) => {
@@ -117,9 +128,11 @@ export default async function SessionDetailPage({ params, searchParams }: Sessio
     return {
       id: row.id,
       name: customer && "full_name" in customer ? String(customer.full_name) : "Unknown customer",
-      email: customer && "email" in customer ? String(customer.email) : "",
+      email: customer && "email" in customer && customer.email ? String(customer.email) : "No email",
       phone: customer && "phone" in customer ? String(customer.phone) : "",
-      baby: customer && "baby_name" in customer ? `${String(customer.baby_name)}, ${String(customer.baby_age_months)} months` : "",
+      baby: row.baby_name
+        ? `${String(row.baby_name)}, ${String(row.baby_age_months)} months`
+        : customer && "baby_name" in customer ? `${String(customer.baby_name)}, ${String(customer.baby_age_months)} months` : "",
       payment: row.source === "manual"
         ? String(row.manual_payment_type ?? "manual").replaceAll("_", " ")
         : order && "total_pence" in order ? `${String(order.status)} · £${(Number(order.total_pence) / 100).toFixed(2)}` : "Checkout",
@@ -156,7 +169,7 @@ function SessionView({ preview, slot, bookings, otherSlots, message }: SessionVi
       </div>
       {preview && <p className="admin-demo-note">Preview data — actions become available after Supabase is connected.</p>}
       {message.result && <p className="admin-success">Booking {message.result} successfully.</p>}
-      {message.error && <p className="form-error">That change could not be completed. The destination may now be full.</p>}
+      {message.error && <p className="form-error">{message.error === "full" ? "That class is now full." : message.error === "add" ? "The booking could not be added. Please check the details and try again." : "That change could not be completed. The destination may now be full."}</p>}
 
       <section className="admin-panel">
         <div className="admin-panel-heading"><div><p className="booking-eyebrow">Attendees</p><h2>Current roster</h2></div></div>
@@ -177,7 +190,7 @@ function SessionView({ preview, slot, bookings, otherSlots, message }: SessionVi
         <form className="manual-booking-form" action={addManualBooking}>
           <input type="hidden" name="slotId" value={slot.id} />
           <label>Name<input required name="fullName" disabled={preview} /></label>
-          <label>Email<input required type="email" name="email" disabled={preview} /></label>
+          <label>Email (optional)<input type="email" name="email" disabled={preview} /></label>
           <label>Phone<input required name="phone" disabled={preview} /></label>
           <label>Baby’s name<input required name="babyName" disabled={preview} /></label>
           <label>Baby’s age (months)<input required type="number" min="0" max="60" name="babyAgeMonths" disabled={preview} /></label>

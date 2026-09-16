@@ -10,6 +10,8 @@ type BookingRow = {
   id: string;
   status: string;
   source: string;
+  baby_name: string | null;
+  baby_age_months: number | null;
   slots: { starts_at: string; session_variants: { name: string } | Array<{ name: string }> | null } | Array<{ starts_at: string; session_variants: { name: string } | Array<{ name: string }> | null }> | null;
 };
 
@@ -25,18 +27,25 @@ export default async function CustomerPage({ params }: CustomerPageProps) {
   }
 
   const supabase = createSupabaseAdmin();
-  const [{ data: customer }, { data: orderRows }, { data: bookingRows }] = await Promise.all([
+  const [{ data: customer }, { data: orderRows }] = await Promise.all([
     supabase.from("customers").select("full_name,email,phone,baby_name,baby_age_months").eq("id", id).single(),
     supabase.from("orders").select("id,created_at,quantity,total_pence,refunded_pence,status").eq("customer_id", id).order("created_at", { ascending: false }),
-    supabase.from("bookings").select("id,status,source,slots(starts_at,session_variants(name))").eq("customer_id", id).order("created_at", { ascending: false }),
   ]);
   if (!customer) redirect("/admin/customers");
+
+  let { data: bookingRows, error: bookingError } = await supabase.from("bookings").select("id,status,source,baby_name,baby_age_months,slots(starts_at,session_variants(name))").eq("customer_id", id).order("created_at", { ascending: false });
+  if (bookingError?.code === "42703") {
+    const fallback = await supabase.from("bookings").select("id,status,source,slots(starts_at,session_variants(name))").eq("customer_id", id).order("created_at", { ascending: false });
+    bookingRows = (fallback.data ?? []).map((row) => ({ ...row, baby_name: null, baby_age_months: null })) as typeof bookingRows;
+    bookingError = fallback.error;
+  }
+  if (bookingError) throw new Error(`Unable to load customer bookings: ${bookingError.message}`);
 
   return <CustomerView customer={customer} orders={(orderRows ?? []) as OrderRow[]} bookings={(bookingRows ?? []) as BookingRow[]} />;
 }
 
 function CustomerView({ customer, orders, bookings }: {
-  customer: { full_name: string; email: string; phone: string; baby_name: string; baby_age_months: number };
+  customer: { full_name: string; email: string | null; phone: string; baby_name: string; baby_age_months: number };
   orders: OrderRow[];
   bookings: BookingRow[];
 }) {
@@ -51,6 +60,7 @@ function CustomerView({ customer, orders, bookings }: {
     return slot && new Date(slot.starts_at) < now;
   });
   const totalSpent = orders.filter((order) => ["paid", "partially_refunded", "refunded"].includes(order.status)).reduce((sum, order) => sum + (order.total_pence ?? 0) - order.refunded_pence, 0);
+  const babies = Array.from(new Map(bookings.filter((booking) => booking.baby_name).map((booking) => [booking.baby_name!.toLowerCase(), `${booking.baby_name}, ${booking.baby_age_months} months`])).values());
 
   const bookingRows = (rows: BookingRow[]) => rows.length ? rows.map((booking) => {
     const slot = Array.isArray(booking.slots) ? booking.slots[0] : booking.slots;
@@ -68,7 +78,7 @@ function CustomerView({ customer, orders, bookings }: {
         <article><span>Past classes</span><strong>{past.length}</strong></article>
       </section>
       <section className="admin-detail-grid">
-        <article className="admin-panel admin-contact-card"><div className="admin-panel-heading"><p className="booking-eyebrow">Contact</p><h2>{customer.email}</h2></div><dl><div><dt>Phone</dt><dd>{customer.phone}</dd></div><div><dt>Baby</dt><dd>{customer.baby_name}, {customer.baby_age_months} months</dd></div></dl></article>
+        <article className="admin-panel admin-contact-card"><div className="admin-panel-heading"><p className="booking-eyebrow">Contact</p><h2>{customer.email ?? "No email address"}</h2></div><dl><div><dt>Phone</dt><dd>{customer.phone}</dd></div><div><dt>{babies.length > 1 ? "Babies" : "Baby"}</dt><dd>{babies.length ? babies.join(" · ") : `${customer.baby_name}, ${customer.baby_age_months} months`}</dd></div></dl></article>
         <section className="admin-panel"><div className="admin-panel-heading"><p className="booking-eyebrow">Next up</p><h2>Upcoming bookings</h2></div><div className="admin-table-wrap"><table><thead><tr><th>Date</th><th>Session</th><th>Source</th></tr></thead><tbody>{bookingRows(upcoming)}</tbody></table></div></section>
       </section>
       <section className="admin-panel"><div className="admin-panel-heading"><p className="booking-eyebrow">History</p><h2>Past bookings</h2></div><div className="admin-table-wrap"><table><thead><tr><th>Date</th><th>Session</th><th>Source</th></tr></thead><tbody>{bookingRows(past)}</tbody></table></div></section>

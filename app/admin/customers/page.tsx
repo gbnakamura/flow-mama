@@ -12,7 +12,7 @@ type CustomersPageProps = {
 type CustomerRow = {
   id: string;
   full_name: string;
-  email: string;
+  email: string | null;
   phone: string;
   baby_name: string;
   baby_age_months: number;
@@ -49,7 +49,7 @@ export default async function CustomersPage({ searchParams }: CustomersPageProps
 
   if (q.trim()) {
     const needle = q.trim().toLowerCase();
-    customers = customers.filter((customer) => `${customer.full_name} ${customer.email} ${customer.phone}`.toLowerCase().includes(needle));
+    customers = customers.filter((customer) => `${customer.full_name} ${customer.email ?? ""} ${customer.phone}`.toLowerCase().includes(needle));
   }
 
   const activity = new Map<string, { count: number; lastSeen?: string }>();
@@ -72,7 +72,7 @@ export default async function CustomersPage({ searchParams }: CustomersPageProps
         <div className="admin-table-wrap"><table><thead><tr><th>Customer</th><th>Contact</th><th>Baby</th><th>Classes</th><th>Last session</th></tr></thead><tbody>
           {customers.map((customer) => {
             const customerActivity = activity.get(customer.id);
-            return <tr key={customer.id}><td><a className="admin-row-link" href={`/admin/customers/${customer.id}`}>{customer.full_name}</a></td><td>{customer.email}<small>{customer.phone}</small></td><td>{customer.baby_name}, {customer.baby_age_months} months</td><td>{customerActivity?.count ?? 0}</td><td>{customerActivity?.lastSeen ? dateFormatter.format(new Date(customerActivity.lastSeen)) : "—"}</td></tr>;
+            return <tr key={customer.id}><td><a className="admin-row-link" href={`/admin/customers/${customer.id}`}>{customer.full_name}</a></td><td>{customer.email ?? "No email"}<small>{customer.phone}</small></td><td>{customer.baby_name}, {customer.baby_age_months} months</td><td>{customerActivity?.count ?? 0}</td><td>{customerActivity?.lastSeen ? dateFormatter.format(new Date(customerActivity.lastSeen)) : "—"}</td></tr>;
           })}
           {!customers.length && <tr><td colSpan={5}>No customers match that search.</td></tr>}
         </tbody></table></div>
