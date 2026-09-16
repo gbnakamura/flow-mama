@@ -77,6 +77,7 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
 
   const unitPrice = priceFor(selected.size);
   const total = selected.size * unitPrice;
+  const saving = selected.size * 22 - total;
   const selectedSessions = useMemo(
     () => sessions.filter((session) => selected.has(session.id)),
     [selected, sessions],
@@ -283,11 +284,17 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
             <p className="empty-summary">Choose at least one class to continue.</p>
           )}
 
+          {saving > 0 && (
+            <div className="summary-saving">
+              <span>Multi-class saving</span>
+              <strong>−£{saving.toFixed(2)}</strong>
+            </div>
+          )}
+
           <div className="summary-total">
             <span>Total</span>
             <strong>£{total.toFixed(2)}</strong>
           </div>
-          {selected.size > 0 && <p className="per-class">£{unitPrice.toFixed(2)} per class</p>}
 
           {step === "dates" && (
             <button className="continue-button" disabled={selected.size === 0} type="button" onClick={() => setStep("details")}>

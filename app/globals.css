@@ -183,9 +183,11 @@ a { color: inherit; }
 .selected-list small { color: rgba(248, 239, 224, 0.6); }
 .selected-list .more-dates { color: var(--coral-soft); justify-content: flex-start; }
 
+.summary-saving { margin-top: 20px; padding: 0 0 13px; display: flex; justify-content: space-between; align-items: baseline; color: var(--coral); }
+.summary-saving strong { font-family: var(--display); font-size: 1.15rem; }
 .summary-total { padding-top: 20px; display: flex; justify-content: space-between; align-items: end; border-top: 1px solid rgba(248,239,224,0.16); }
 .summary-total strong { font-family: var(--display); font-size: 2rem; }
-.per-class { margin: 2px 0 18px; color: rgba(248,239,224,0.6); font-size: 0.8rem; text-align: right; }
+.summary-total { margin-bottom: 18px; }
 
 .continue-button {
   width: 100%;
