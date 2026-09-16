@@ -84,7 +84,16 @@ a { color: inherit; }
 }
 
 .booking-intro h1 em { color: var(--coral-deep); font-weight: 700; }
-.booking-intro > p:last-child { max-width: 620px; margin: 24px 0 0; color: var(--ink-soft); font-size: 1.12rem; }
+.booking-lede { max-width: 620px; margin: 24px 0 0; color: var(--ink-soft); font-size: 1.12rem; }
+
+.pricing-overview { max-width: 680px; margin-top: 24px; }
+.pricing-overview > p { margin: 0 0 9px; color: var(--ink); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.pricing-tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.pricing-tiers > div { min-height: 104px; padding: 14px 16px; display: grid; align-content: center; border: 1.5px solid var(--line); border-radius: 15px; background: rgba(255, 250, 242, 0.72); }
+.pricing-tiers > div.is-current { border-color: var(--coral-deep); background: #fff8ef; box-shadow: 0 8px 24px rgba(80, 52, 42, 0.07); }
+.pricing-tiers span { color: var(--ink-soft); font-size: 0.9rem; }
+.pricing-tiers strong { color: var(--coral-deep); font-family: var(--display); font-size: 1.8rem; line-height: 1.1; }
+.pricing-tiers small { color: var(--ink-soft); font-size: 0.76rem; }
 
 .booking-layout {
   max-width: 1180px;
@@ -173,12 +182,6 @@ a { color: inherit; }
 .selected-list li { display: flex; justify-content: space-between; gap: 12px; font-size: 0.88rem; }
 .selected-list small { color: rgba(248, 239, 224, 0.6); }
 .selected-list .more-dates { color: var(--coral-soft); justify-content: flex-start; }
-
-.price-progress { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 24px 0; }
-.price-progress div { padding: 9px 6px; display: grid; gap: 1px; text-align: center; border-radius: 9px; background: rgba(255,255,255,0.07); color: rgba(248,239,224,0.55); }
-.price-progress div.reached { background: rgba(237,138,123,0.18); color: var(--cream); }
-.price-progress span { font-size: 0.65rem; letter-spacing: 0.08em; }
-.price-progress strong { font-size: 0.9rem; }
 
 .summary-total { padding-top: 20px; display: flex; justify-content: space-between; align-items: end; border-top: 1px solid rgba(248,239,224,0.16); }
 .summary-total strong { font-family: var(--display); font-size: 2rem; }
@@ -383,6 +386,10 @@ a { color: inherit; }
   .back-link svg { width: 22px; height: 22px; }
   .booking-intro { padding-top: 38px; }
   .booking-intro h1 { font-size: clamp(2.45rem, 13vw, 3.7rem); }
+  .pricing-tiers { gap: 7px; }
+  .pricing-tiers > div { min-height: 98px; padding: 12px 10px; }
+  .pricing-tiers span { font-size: 0.78rem; }
+  .pricing-tiers strong { font-size: 1.55rem; }
   .section-heading-row { display: grid; gap: 8px; }
   .session-row { grid-template-columns: auto minmax(0, 1fr) 22px; gap: 12px; padding-right: 14px; }
   .availability { grid-column: 2; }

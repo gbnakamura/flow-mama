@@ -136,7 +136,27 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
       <div className="booking-intro">
         <p className="booking-eyebrow">Autumn term · Northfields</p>
         <h1>Choose the mornings<br /><em>that work for you.</em></h1>
-        <p>Select any mix of Early and Late Flow. Your price updates automatically as you add dates.</p>
+        <p className="booking-lede">Select any mix of Early and Late Flow. Your price updates automatically as you add dates.</p>
+        <div className="pricing-overview" aria-label="Price per class">
+          <p>Price per class</p>
+          <div className="pricing-tiers">
+            <div className={selected.size >= 1 && selected.size <= 5 ? "is-current" : ""}>
+              <span>1–5 classes</span>
+              <strong>£22</strong>
+              <small>per class</small>
+            </div>
+            <div className={selected.size >= 6 && selected.size <= 9 ? "is-current" : ""}>
+              <span>6–9 classes</span>
+              <strong>£16</strong>
+              <small>per class</small>
+            </div>
+            <div className={selected.size >= 10 ? "is-current" : ""}>
+              <span>10+ classes</span>
+              <strong>£14</strong>
+              <small>per class</small>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="booking-layout">
@@ -262,12 +282,6 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
           ) : (
             <p className="empty-summary">Choose at least one class to continue.</p>
           )}
-
-          <div className="price-progress" aria-label="Volume pricing">
-            <div className={selected.size >= 1 ? "reached" : ""}><span>1–5</span><strong>£22</strong></div>
-            <div className={selected.size >= 6 ? "reached" : ""}><span>6–9</span><strong>£16</strong></div>
-            <div className={selected.size >= 10 ? "reached" : ""}><span>10+</span><strong>£14</strong></div>
-          </div>
 
           <div className="summary-total">
             <span>Total</span>
