@@ -177,7 +177,7 @@ a { color: inherit; }
 .summary-count { display: flex; align-items: baseline; gap: 10px; }
 .summary-count strong { font-family: var(--display); font-size: 3.1rem; line-height: 1; }
 .summary-count span { color: rgba(248, 239, 224, 0.7); }
-.empty-summary { min-height: 56px; margin: 22px 0; color: rgba(248, 239, 224, 0.64); }
+.empty-summary { margin: 22px 0 28px; color: rgba(248, 239, 224, 0.64); }
 .selected-list { min-height: 56px; margin: 20px 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 .selected-list li { display: flex; justify-content: space-between; gap: 12px; font-size: 0.88rem; }
 .selected-list small { color: rgba(248, 239, 224, 0.6); }
