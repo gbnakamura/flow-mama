@@ -70,7 +70,7 @@ function CustomerView({ customer, orders, bookings }: {
 
   return (
     <main className="admin-shell">
-      <AdminHeader title={customer.full_name} eyebrow="Customer profile" />
+      <AdminHeader title={customer.full_name} eyebrow="Customer profile" active="customers" />
       <section className="admin-stats admin-stats-four">
         <article><span>Total spent</span><strong>£{(totalSpent / 100).toFixed(2)}</strong></article>
         <article><span>Classes booked</span><strong>{confirmed.length}</strong></article>

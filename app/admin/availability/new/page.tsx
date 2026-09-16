@@ -102,7 +102,7 @@ export default async function NewAvailabilityPage({ searchParams }: NewAvailabil
 
   return (
     <main className="admin-shell">
-      <AdminHeader title="Publish new dates" eyebrow="Availability" />
+      <AdminHeader title="Publish new dates" eyebrow="Availability" active="availability" />
       {message.result && <p className="admin-success">Created {message.count} recurring sessions successfully.</p>}
       {message.error && <p className="form-error">We couldn’t create those sessions. Check the dates and times, then try again.</p>}
 

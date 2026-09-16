@@ -67,7 +67,7 @@ export default async function RevenuePage({ searchParams }: RevenuePageProps) {
 
   return (
     <main className="admin-shell">
-      <AdminHeader title="Revenue" eyebrow="Reporting" />
+      <AdminHeader title="Revenue" eyebrow="Reporting" active="revenue" />
       <div className="admin-filter-bar">
         <div className="admin-range-links"><a className={range === "7" ? "active" : ""} href="?range=7">7 days</a><a className={range === "30" ? "active" : ""} href="?range=30">30 days</a><a className={range === "90" ? "active" : ""} href="?range=90">90 days</a></div>
         <form method="get"><input type="hidden" name="range" value="custom" /><label>From<input type="date" name="from" defaultValue={params.from} required /></label><label>To<input type="date" name="to" defaultValue={params.to} required /></label><button>Apply</button></form>

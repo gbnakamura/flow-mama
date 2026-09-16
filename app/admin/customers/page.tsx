@@ -63,7 +63,7 @@ export default async function CustomersPage({ searchParams }: CustomersPageProps
 
   return (
     <main className="admin-shell">
-      <AdminHeader title="Customers" eyebrow="People" />
+      <AdminHeader title="Customers" eyebrow="People" active="customers" />
       <section className="admin-panel">
         <div className="admin-panel-heading admin-panel-heading-split">
           <div><p className="booking-eyebrow">Directory</p><h2>{customers.length} customers</h2></div>
