@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { ArrowLeft, UserPlus } from "lucide-react";
+import { AdminHeader } from "@/components/admin-header";
 import { requireAdmin } from "@/lib/auth/admin";
 import { createSupabaseAdmin } from "@/lib/supabase/admin";
 
@@ -56,22 +57,39 @@ async function addManualBooking(formData: FormData) {
   redirect(`/admin/sessions/${slotId}?result=added`);
 }
 
+async function cancelSession(formData: FormData) {
+  "use server";
+  const admin = await requireAdmin();
+  const slotId = String(formData.get("slotId") ?? "");
+  if (admin.preview) redirect(`/admin/sessions/${slotId}?error=cancel`);
+  if (formData.get("confirm") !== "yes") redirect(`/admin/sessions/${slotId}?error=confirm`);
+
+  const supabase = createSupabaseAdmin();
+  const { error } = await supabase.from("slots").update({ status: "cancelled", updated_at: new Date().toISOString() }).eq("id", slotId);
+  if (error) redirect(`/admin/sessions/${slotId}?error=cancel`);
+  await supabase.from("admin_audit_log").insert({ admin_email: admin.email, action: "session_cancelled", entity_type: "slot", entity_id: slotId });
+  revalidatePath("/admin");
+  revalidatePath("/book");
+  revalidatePath(`/admin/sessions/${slotId}`);
+  redirect(`/admin/sessions/${slotId}?result=cancelled`);
+}
+
 export default async function SessionDetailPage({ params, searchParams }: SessionPageProps) {
   const { id } = await params;
   const message = await searchParams;
   const admin = await requireAdmin();
 
   if (admin.preview) {
-    return <SessionView preview slot={{ id, startsAt: "2026-09-21T08:20:00.000Z", variantName: "Early Flow", capacity: 8, bookedCount: 2 }} bookings={[
-      { id: "preview-1", name: "Preview customer", email: "mama@example.com", phone: "07123 456789", baby: "Mia, 5 months", payment: "Paid · £96.00" },
-      { id: "preview-2", name: "Manual booking", email: "hello@example.com", phone: "07999 123456", baby: "Leo, 3 months", payment: "Cash" },
+    return <SessionView preview slot={{ id, startsAt: "2026-09-21T08:20:00.000Z", variantName: "Early Flow", capacity: 8, bookedCount: 2, status: "scheduled" }} bookings={[
+      { id: "preview-1", name: "Preview customer", email: "mama@example.com", phone: "07123 456789", baby: "Mia, 5 months", payment: "Paid · £96.00", bookingSummary: "6 classes booked" },
+      { id: "preview-2", name: "Manual booking", email: "hello@example.com", phone: "07999 123456", baby: "Leo, 3 months", payment: "Cash", bookingSummary: "Manual booking" },
     ]} otherSlots={[]} message={message} />;
   }
 
   const supabase = createSupabaseAdmin();
   const { data: slot, error: slotError } = await supabase
     .from("slots")
-    .select("id, starts_at, capacity, booked_count, session_variant_id, session_variants(name)")
+    .select("id, starts_at, capacity, booked_count, status, session_variant_id, session_variants(name)")
     .eq("id", id)
     .single();
   if (slotError || !slot) redirect("/admin");
@@ -79,7 +97,7 @@ export default async function SessionDetailPage({ params, searchParams }: Sessio
   const [{ data: bookingRows }, { data: otherRows }] = await Promise.all([
     supabase
       .from("bookings")
-      .select("id, source, manual_payment_type, customer_id, order_id, customers(full_name,email,phone,baby_name,baby_age_months), orders(total_pence,status)")
+      .select("id, source, manual_payment_type, customer_id, order_id, customers(full_name,email,phone,baby_name,baby_age_months), orders(total_pence,status,quantity)")
       .eq("slot_id", id)
       .eq("status", "confirmed")
       .order("created_at", { ascending: true }),
@@ -105,6 +123,9 @@ export default async function SessionDetailPage({ params, searchParams }: Sessio
       payment: row.source === "manual"
         ? String(row.manual_payment_type ?? "manual").replaceAll("_", " ")
         : order && "total_pence" in order ? `${String(order.status)} · £${(Number(order.total_pence) / 100).toFixed(2)}` : "Checkout",
+      bookingSummary: row.source === "manual"
+        ? "Manual booking"
+        : order && "quantity" in order ? `${String(order.quantity)} classes booked` : "Online booking",
     };
   });
   const otherSlots = (otherRows ?? []).filter((row) => row.booked_count < row.capacity).map((row) => {
@@ -112,13 +133,13 @@ export default async function SessionDetailPage({ params, searchParams }: Sessio
     return { id: row.id, label: `${rowVariant && "name" in rowVariant ? String(rowVariant.name) : "Flow Mama"} — ${dateFormatter.format(new Date(row.starts_at))}` };
   });
 
-  return <SessionView preview={false} slot={{ id: slot.id, startsAt: slot.starts_at, variantName: variant && "name" in variant ? String(variant.name) : "Flow Mama", capacity: slot.capacity, bookedCount: slot.booked_count }} bookings={bookings} otherSlots={otherSlots} message={message} />;
+  return <SessionView preview={false} slot={{ id: slot.id, startsAt: slot.starts_at, variantName: variant && "name" in variant ? String(variant.name) : "Flow Mama", capacity: slot.capacity, bookedCount: slot.booked_count, status: slot.status }} bookings={bookings} otherSlots={otherSlots} message={message} />;
 }
 
 type SessionViewProps = {
   preview: boolean;
-  slot: { id: string; startsAt: string; variantName: string; capacity: number; bookedCount: number };
-  bookings: Array<{ id: string; name: string; email: string; phone: string; baby: string; payment: string }>;
+  slot: { id: string; startsAt: string; variantName: string; capacity: number; bookedCount: number; status: string };
+  bookings: Array<{ id: string; name: string; email: string; phone: string; baby: string; payment: string; bookingSummary: string }>;
   otherSlots: Array<{ id: string; label: string }>;
   message: { result?: string; error?: string };
 };
@@ -126,11 +147,12 @@ type SessionViewProps = {
 function SessionView({ preview, slot, bookings, otherSlots, message }: SessionViewProps) {
   return (
     <main className="admin-shell">
+      <AdminHeader title="Session details" eyebrow="Schedule" />
       <div className="session-page-heading">
-        <a href="/admin" className="back-link"><ArrowLeft size={17} /> Dashboard</a>
+        <a href="/admin" className="back-link"><ArrowLeft size={17} /> All sessions</a>
         <p className="booking-eyebrow">Session roster</p>
         <h1>{slot.variantName}</h1>
-        <p>{dateFormatter.format(new Date(slot.startsAt))} · {slot.bookedCount}/{slot.capacity} booked</p>
+        <p>{dateFormatter.format(new Date(slot.startsAt))} · {slot.bookedCount}/{slot.capacity} booked · <span className={slot.status === "cancelled" ? "admin-status-cancelled" : ""}>{slot.status}</span></p>
       </div>
       {preview && <p className="admin-demo-note">Preview data — actions become available after Supabase is connected.</p>}
       {message.result && <p className="admin-success">Booking {message.result} successfully.</p>}
@@ -140,7 +162,7 @@ function SessionView({ preview, slot, bookings, otherSlots, message }: SessionVi
         <div className="admin-panel-heading"><div><p className="booking-eyebrow">Attendees</p><h2>Current roster</h2></div></div>
         {bookings.length ? <div className="roster-list">{bookings.map((booking) => (
           <article className="roster-card" key={booking.id}>
-            <div><h3>{booking.name}</h3><p>{booking.email} · {booking.phone}</p><small>{booking.baby}</small></div>
+            <div><h3>{booking.name}</h3><p>{booking.email} · {booking.phone}</p><small>{booking.baby} · {booking.bookingSummary}</small></div>
             <span className="admin-badge">{booking.payment}</span>
             <div className="roster-actions">
               <form action={moveBooking}><input type="hidden" name="bookingId" value={booking.id} /><input type="hidden" name="slotId" value={slot.id} /><select name="targetSlotId" required disabled={preview || !otherSlots.length}><option value="">Move to…</option>{otherSlots.map((target) => <option key={target.id} value={target.id}>{target.label}</option>)}</select><button disabled={preview || !otherSlots.length}>Move</button></form>
@@ -160,9 +182,14 @@ function SessionView({ preview, slot, bookings, otherSlots, message }: SessionVi
           <label>Baby’s name<input required name="babyName" disabled={preview} /></label>
           <label>Baby’s age (months)<input required type="number" min="0" max="60" name="babyAgeMonths" disabled={preview} /></label>
           <label>Payment<select name="paymentType" disabled={preview}><option value="payment_due">Payment due</option><option value="bank_transfer">Bank transfer</option><option value="cash">Cash</option><option value="complimentary">Complimentary</option></select></label>
-          <button className="pay-button" disabled={preview || slot.bookedCount >= slot.capacity}>Add to session</button>
+          <button className="pay-button" disabled={preview || slot.bookedCount >= slot.capacity || slot.status === "cancelled"}>Add to session</button>
         </form>
       </section>
+
+      {slot.status !== "cancelled" && <section className="admin-panel admin-danger-panel">
+        <div className="admin-panel-heading"><div><p className="booking-eyebrow">Session management</p><h2>Cancel this entire session</h2></div><p>This removes the session from public booking. Existing attendees remain listed so you can move or refund them individually.</p></div>
+        <form action={cancelSession}><input type="hidden" name="slotId" value={slot.id} /><label><input required type="checkbox" name="confirm" value="yes" /> I understand that refunds are handled separately in Stripe.</label><button className="danger-button" disabled={preview}>Cancel session</button></form>
+      </section>}
     </main>
   );
 }

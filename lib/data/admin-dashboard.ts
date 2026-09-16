@@ -18,6 +18,7 @@ export type AdminOrder = {
   email: string;
   quantity: number;
   totalPence: number;
+  refundedPence: number;
   status: string;
 };
 
@@ -30,7 +31,7 @@ export async function loadAdminDashboard() {
       .order("starts_at", { ascending: true }),
     supabase
       .from("orders")
-      .select("id, created_at, quantity, total_pence, status, customers(full_name, email)")
+      .select("id, created_at, quantity, total_pence, refunded_pence, status, customers(full_name, email)")
       .order("created_at", { ascending: false })
       .limit(50),
   ]);
@@ -58,6 +59,7 @@ export async function loadAdminDashboard() {
       email: customer && "email" in customer ? String(customer.email) : "",
       quantity: row.quantity,
       totalPence: row.total_pence ?? 0,
+      refundedPence: row.refunded_pence ?? 0,
       status: row.status,
     };
   });

@@ -1,8 +1,7 @@
-import { redirect } from "next/navigation";
 import { CalendarDays, CreditCard, Users } from "lucide-react";
+import { AdminHeader } from "@/components/admin-header";
 import { requireAdmin } from "@/lib/auth/admin";
 import { loadAdminDashboard, type AdminOrder, type AdminSlot } from "@/lib/data/admin-dashboard";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +12,7 @@ const demoSlots: AdminSlot[] = [
 ];
 
 const demoOrders: AdminOrder[] = [
-  { id: "demo-order-1", createdAt: new Date().toISOString(), customerName: "Preview booking", email: "mama@example.com", quantity: 6, totalPence: 9600, status: "paid" },
+  { id: "demo-order-1", createdAt: new Date().toISOString(), customerName: "Preview booking", email: "mama@example.com", quantity: 6, totalPence: 9600, refundedPence: 0, status: "paid" },
 ];
 
 const dateFormatter = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", hour12: false });
@@ -23,30 +22,18 @@ export default async function AdminPage() {
   const configured = !admin.preview;
 
   const { slots, orders } = configured ? await loadAdminDashboard() : { slots: demoSlots, orders: demoOrders };
-  const upcoming = slots.filter((slot) => slot.status === "scheduled");
-  const booked = upcoming.reduce((sum, slot) => sum + slot.bookedCount, 0);
-  const revenue = orders.filter((order) => ["paid", "partially_refunded"].includes(order.status)).reduce((sum, order) => sum + order.totalPence, 0);
-
-  async function signOut() {
-    "use server";
-    if (configured) {
-      const supabase = await createSupabaseServerClient();
-      await supabase.auth.signOut();
-    }
-    redirect("/admin/login");
-  }
+  const upcoming = slots.filter((slot) => new Date(slot.startsAt) > new Date());
+  const scheduled = upcoming.filter((slot) => slot.status === "scheduled");
+  const booked = scheduled.reduce((sum, slot) => sum + slot.bookedCount, 0);
+  const revenue = orders.filter((order) => ["paid", "partially_refunded"].includes(order.status)).reduce((sum, order) => sum + order.totalPence - order.refundedPence, 0);
 
   return (
     <main className="admin-shell">
-      <header className="admin-header">
-        <img src="/images/logo.svg" alt="Flow Mama" />
-        <div><p>Admin</p><h1>Bookings at a glance</h1></div>
-        <form action={signOut}><button type="submit">Sign out</button></form>
-      </header>
+      <AdminHeader title="Bookings at a glance" />
       {!configured && <p className="admin-demo-note">Preview data — connect Supabase to enable live bookings and secure sign-in.</p>}
 
       <section className="admin-stats" aria-label="Booking summary">
-        <article><CalendarDays /><span>Upcoming classes</span><strong>{upcoming.length}</strong></article>
+        <article><CalendarDays /><span>Upcoming classes</span><strong>{scheduled.length}</strong></article>
         <article><Users /><span>Places booked</span><strong>{booked}</strong></article>
         <article><CreditCard /><span>Paid revenue</span><strong>£{(revenue / 100).toFixed(2)}</strong></article>
       </section>
@@ -54,7 +41,7 @@ export default async function AdminPage() {
       <section className="admin-panel">
         <div className="admin-panel-heading"><div><p className="booking-eyebrow">Schedule</p><h2>Upcoming classes</h2></div></div>
         <div className="admin-table-wrap"><table><thead><tr><th>Date</th><th>Session</th><th>Booked</th><th>Spaces</th><th>Status</th></tr></thead><tbody>
-          {upcoming.map((slot) => <tr key={slot.id}><td><a className="admin-row-link" href={`/admin/sessions/${slot.id}`}>{dateFormatter.format(new Date(slot.startsAt))}</a></td><td>{slot.variantName}</td><td>{slot.bookedCount} / {slot.capacity}</td><td>{Math.max(0, slot.capacity - slot.bookedCount)}</td><td><span className={slot.bookedCount >= slot.capacity ? "admin-badge sold" : "admin-badge"}>{slot.bookedCount >= slot.capacity ? "Full" : "Open"}</span></td></tr>)}
+          {upcoming.map((slot) => <tr key={slot.id}><td><a className="admin-row-link" href={`/admin/sessions/${slot.id}`}>{dateFormatter.format(new Date(slot.startsAt))}</a></td><td>{slot.variantName}</td><td>{slot.bookedCount} / {slot.capacity}</td><td>{Math.max(0, slot.capacity - slot.bookedCount)}</td><td><span className={slot.status === "cancelled" || slot.bookedCount >= slot.capacity ? "admin-badge sold" : "admin-badge"}>{slot.status === "cancelled" ? "Cancelled" : slot.bookedCount >= slot.capacity ? "Full" : "Open"}</span></td></tr>)}
         </tbody></table></div>
       </section>
 
