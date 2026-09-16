@@ -71,7 +71,6 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [step, setStep] = useState<"dates" | "details">("dates");
   const [customer, setCustomer] = useState(emptyCustomer);
-  const [eligibilityConfirmed, setEligibilityConfirmed] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -107,7 +106,6 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
             ...customer,
             babyAgeMonths: Number(customer.babyAgeMonths),
           },
-          eligibilityConfirmed,
           termsAccepted,
         }),
       });
@@ -230,10 +228,6 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
                     <input required type="number" inputMode="numeric" min="0" max="60" value={customer.babyAgeMonths} onChange={(event) => setCustomer({ ...customer, babyAgeMonths: event.target.value })} />
                   </label>
                 </div>
-                <label className="consent-row">
-                  <input required type="checkbox" checked={eligibilityConfirmed} onChange={(event) => setEligibilityConfirmed(event.target.checked)} />
-                  <span>I confirm that I meet Flow Mama’s postnatal participation requirements and am able to take part safely.</span>
-                </label>
                 <label className="consent-row">
                   <input required type="checkbox" checked={termsAccepted} onChange={(event) => setTermsAccepted(event.target.checked)} />
                   <span>I agree to the Flow Mama <a href="/terms" target="_blank">Terms &amp; Conditions</a>, including the cancellation and refund policy.</span>

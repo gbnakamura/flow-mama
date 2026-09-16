@@ -12,7 +12,6 @@ export const checkoutSchema = z.object({
     babyName: z.string().trim().min(1).max(80),
     babyAgeMonths: z.number().int().min(0).max(60),
   }),
-  eligibilityConfirmed: z.literal(true),
   termsAccepted: z.literal(true),
 });
 
