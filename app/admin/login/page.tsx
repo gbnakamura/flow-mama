@@ -9,7 +9,7 @@ export default function AdminLoginPage() {
       <img src="/images/logo.svg" alt="Flow Mama" className="status-logo" />
       <p className="booking-eyebrow">Private admin</p>
       <h1>Welcome back, Amber.</h1>
-      <p>Use your approved email address to receive a secure sign-in link. No password needed.</p>
+      <p>Sign in with your approved email address and password.</p>
       <AdminLoginForm />
     </main>
   );
