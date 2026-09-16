@@ -145,6 +145,16 @@ There is a covered buggy park outside to park your buggy safely. Limited parking
 
 On entering the building, go through the first door on the left and make your way through the kitchen area to the door at the end. Once through this door, walk down the corridor and you will find Room 2.
 
+WHAT TO BRING
+- A water bottle for yourself.
+- Your usual baby changing bag.
+- Optional: Bring a familiar blanket or favorite toy to place in the padded play zone to help your little one feel right at home.
+
+Note: I provide all the yoga mats and props, so no need to lug yours around!
+
+IMPORTANT: YOUR HEALTH SCREENING FORM
+Because my number one priority is your safe postnatal recovery, my insurance requires every mama to fill out a quick health questionnaire before stepping onto the mat. Please fill this out before our first session so I can tailor the movements to support you perfectly.
+
 See you soon,
 Amber
 
@@ -185,6 +195,19 @@ Questions about your booking? Reply to this email or message @flowmamanorthfield
               <tr><td class="px-fluid" style="padding:12px 40px 4px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F8EFE0;border-radius:12px;"><tr><td style="padding:20px 22px;font-family:Arial,Helvetica,sans-serif;color:#3A2E22;">
                 <div style="font-size:11px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;color:#7A6C5B;margin-bottom:8px;">The Venue</div>
                 <div style="font-size:14.5px;line-height:1.6;"><strong>${escapeHtml(venueName)}.</strong> <a href="${escapeHtml(mapsUrl)}" style="color:#E2734A;text-decoration:none;">Open in Google Maps</a><br>There is a covered buggy park outside to park your buggy safely. Limited parking spaces are also available outside the community centre.<br><br>On entering the building, go through the first door on the left and make your way through the kitchen area to the door at the end. Once through this door, walk down the corridor and you will find Room 2.</div>
+                <div style="border-top:1px solid #EAD9BE;margin-top:18px;padding-top:18px;">
+                  <div style="font-size:14.5px;font-weight:bold;line-height:1.5;margin-bottom:8px;">🎒 What to bring:</div>
+                  <ul style="margin:0;padding-left:20px;font-size:14.5px;line-height:1.6;">
+                    <li style="margin-bottom:5px;">A water bottle for yourself.</li>
+                    <li style="margin-bottom:5px;">Your usual baby changing bag.</li>
+                    <li>(Optional) Bring a familiar blanket or favorite toy to place in the padded play zone to help your little one feel right at home.</li>
+                  </ul>
+                  <div style="font-size:14.5px;line-height:1.6;margin-top:12px;"><strong>Note:</strong> I provide all the yoga mats and props, so no need to lug yours around!</div>
+                </div>
+                <div style="border-top:1px solid #EAD9BE;margin-top:18px;padding-top:18px;">
+                  <div style="font-size:14.5px;font-weight:bold;line-height:1.5;margin-bottom:8px;">📋 IMPORTANT: Your Health Screening Form</div>
+                  <div style="font-size:14.5px;line-height:1.6;">Because my number one priority is your safe postnatal recovery, my insurance requires every mama to fill out a quick health questionnaire before stepping onto the mat. Please fill this out before our first session so I can tailor the movements to support you perfectly.</div>
+                </div>
               </td></tr></table></td></tr>
               <tr><td class="px-fluid" style="padding:28px 40px 0;">
                 <div style="font-family:Georgia,'Times New Roman',serif;font-weight:bold;font-size:16px;color:#3A2E22;margin-bottom:4px;">Your sessions this term</div>
