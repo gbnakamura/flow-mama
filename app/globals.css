@@ -335,6 +335,11 @@ a { color: inherit; }
 .admin-login-form { display: grid; gap: 14px; text-align: left; }
 .admin-login-form label { display: grid; gap: 7px; font-size: 0.86rem; font-weight: 600; }
 .admin-login-form input { min-height: 50px; padding: 10px 13px; border: 1.5px solid var(--line); border-radius: 11px; background: var(--cream-light); }
+.password-input-wrap { position: relative; display: block; }
+.password-input-wrap input { width: 100%; padding-right: 48px; }
+.password-visibility-button { position: absolute; top: 50%; right: 8px; display: grid; width: 36px; height: 36px; padding: 0; place-items: center; transform: translateY(-50%); border: 0; border-radius: 9px; background: transparent; color: var(--ink-soft); cursor: pointer; }
+.password-visibility-button:hover { background: rgba(40, 39, 34, 0.08); color: var(--ink); }
+.password-visibility-button:focus-visible { outline: 2px solid var(--coral); outline-offset: 1px; }
 .admin-login-message { padding: 26px; border-radius: 18px; background: var(--cream-light); }
 .admin-login-message h2 { margin: 0 0 8px; font-family: var(--display); }
 .admin-login-message p { margin: 0; color: var(--ink-soft); }

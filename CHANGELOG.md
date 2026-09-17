@@ -18,6 +18,7 @@ No unreleased changes.
 
 ### Added
 
+- A show/hide password control on the admin sign-in form.
 - An admin-only Email previews screen for sending clearly labelled Flow Mama and Personal Training confirmation tests without creating bookings, payments, scripts, or temporary API keys.
 - Programme filters across the admin overview, customer directory, and revenue reporting, with separate Flow Mama and Personal Training totals, schedules, customers, payments, and weekly chart series.
 - A complete Flow Mama favicon set for browser tabs, bookmarks, Apple devices, and installed shortcuts.
@@ -54,6 +55,7 @@ No unreleased changes.
 
 ### Fixed
 
+- Fixed imported Flow Mama bookings being incorrectly shown as sold out after Personal Training availability was introduced.
 - Corrected empty-state spacing above the booking-summary call to action.
 - Allowed separate manual bookings for customers who share an email address.
 - Added a clear selected state to the admin navigation.
