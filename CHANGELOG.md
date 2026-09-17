@@ -37,6 +37,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ### Changed
 
+- Documented the required Stripe price settings for Group and 1:1 Personal Training deployments.
 - Group and 1:1 personal-training price choices now have a clearer interactive hover state.
 - The booking page now explains pricing tiers before customers select their classes.
 - The booking summary shows the customer’s saving once discounted pricing applies.
