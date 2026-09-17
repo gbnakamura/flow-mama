@@ -1,7 +1,7 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
-import { ArrowLeft, Check, LoaderCircle, LockKeyhole } from "lucide-react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { ArrowLeft, Check, ChevronUp, LoaderCircle, LockKeyhole, ShoppingBag } from "lucide-react";
 import type { AvailabilitySlot } from "@/lib/types";
 
 type BookingExperienceProps = {
@@ -74,6 +74,8 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [summaryVisible, setSummaryVisible] = useState(true);
+  const summaryRef = useRef<HTMLElement>(null);
 
   const unitPrice = priceFor(selected.size);
   const total = selected.size * unitPrice;
@@ -83,6 +85,19 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
     [selected, sessions],
   );
 
+  useEffect(() => {
+    const summary = summaryRef.current;
+    if (!summary || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setSummaryVisible(entry.isIntersecting),
+      { threshold: 0.08 },
+    );
+
+    observer.observe(summary);
+    return () => observer.disconnect();
+  }, []);
+
   function toggle(id: string) {
     setSelected((current) => {
       const next = new Set(current);
@@ -90,6 +105,11 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
       else next.add(id);
       return next;
     });
+  }
+
+  function showSummary() {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    summaryRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -263,7 +283,7 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
           )}
         </section>
 
-        <aside className="booking-summary" aria-label="Booking summary">
+        <aside ref={summaryRef} className="booking-summary" aria-label="Booking summary">
           <p className="summary-kicker">Your booking</p>
           <div className="summary-count">
             <strong>{selected.size}</strong>
@@ -304,6 +324,25 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
           <p className="confirmation-note">Places are confirmed once payment is complete.</p>
         </aside>
       </div>
+
+      {step === "dates" && selected.size > 0 && (
+        <button
+          className={`mobile-cart-bar${summaryVisible ? "" : " is-visible"}`}
+          type="button"
+          onClick={showSummary}
+          aria-hidden={summaryVisible}
+          tabIndex={summaryVisible ? -1 : 0}
+          aria-label={`View booking summary: ${selected.size} ${selected.size === 1 ? "class" : "classes"}, £${total.toFixed(2)} total`}
+        >
+          <span className="mobile-cart-icon"><ShoppingBag aria-hidden="true" size={19} /></span>
+          <span className="mobile-cart-copy">
+            <strong>View booking</strong>
+            <small>{selected.size} {selected.size === 1 ? "class" : "classes"} selected</small>
+          </span>
+          <strong className="mobile-cart-total">£{total.toFixed(2)}</strong>
+          <ChevronUp aria-hidden="true" size={19} />
+        </button>
+      )}
     </main>
   );
 }

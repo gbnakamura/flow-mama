@@ -18,6 +18,7 @@ No unreleased changes.
 
 ### Added
 
+- A mobile booking bar that keeps the selected class count and live total visible while the main summary is off-screen, with one-tap navigation back to the summary.
 - A show/hide password control on the admin sign-in form.
 - An admin-only Email previews screen for sending clearly labelled Flow Mama and Personal Training confirmation tests without creating bookings, payments, scripts, or temporary API keys.
 - Programme filters across the admin overview, customer directory, and revenue reporting, with separate Flow Mama and Personal Training totals, schedules, customers, payments, and weekly chart series.
