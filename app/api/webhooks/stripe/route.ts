@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
-import { sendBookingConfirmation, sendCapacityUnavailableNotice } from "@/lib/email";
+import { sendBookingConfirmation, sendCapacityUnavailableNotice, sendPersonalTrainingConfirmation } from "@/lib/email";
 import { getStripe } from "@/lib/stripe";
 import { createSupabaseAdmin } from "@/lib/supabase/admin";
 
@@ -143,12 +143,14 @@ async function fulfilCheckout(session: Stripe.Checkout.Session, eventId: string)
   }
 
   const programme = Array.isArray(order.programmes) ? order.programmes[0] : order.programmes;
-  if (programme?.slug !== "group-personal-training") {
-    try {
+  try {
+    if (programme?.slug === "group-personal-training") {
+      await sendPersonalTrainingConfirmation(orderId);
+    } else {
       await sendBookingConfirmation(orderId);
-    } catch (error) {
-      console.error(`Confirmation email failed for order ${orderId}`, error);
     }
+  } catch (error) {
+    console.error(`Confirmation email failed for order ${orderId}`, error);
   }
 }
 

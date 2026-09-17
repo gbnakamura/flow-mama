@@ -242,6 +242,148 @@ Questions about your booking? Reply to this email or message @flowmamanorthfield
   if (error) throw new Error(`Resend rejected the confirmation: ${error.message}`);
 }
 
+export async function sendPersonalTrainingConfirmation(orderId: string) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.RESEND_FROM_EMAIL;
+  if (!apiKey || !from) {
+    console.warn("Personal training confirmation skipped because Resend is not configured.");
+    return;
+  }
+
+  const supabase = createSupabaseAdmin();
+  const { data: order, error: orderError } = await supabase
+    .from("orders")
+    .select("id, customer_id, total_pence")
+    .eq("id", orderId)
+    .single();
+  if (orderError || !order) throw new Error(`Unable to load training confirmation order: ${orderError?.message}`);
+
+  const [{ data: customer, error: customerError }, { data: bookings, error: bookingsError }] = await Promise.all([
+    supabase.from("customers").select("full_name, email").eq("id", order.customer_id).single(),
+    supabase.from("bookings").select("slot_id, booking_mode").eq("order_id", order.id).eq("status", "confirmed"),
+  ]);
+  if (customerError || !customer) throw new Error(`Unable to load training confirmation customer: ${customerError?.message}`);
+  if (bookingsError) throw new Error(`Unable to load training confirmation bookings: ${bookingsError.message}`);
+  if (!customer.email) throw new Error("Training confirmation customer has no email address.");
+
+  const slotIds = (bookings ?? []).map((booking) => booking.slot_id);
+  const { data: slots, error: slotsError } = await supabase
+    .from("slots")
+    .select("id, starts_at, ends_at")
+    .in("id", slotIds)
+    .order("starts_at", { ascending: true });
+  if (slotsError) throw new Error(`Unable to load training confirmation dates: ${slotsError.message}`);
+
+  const bookingBySlot = new Map((bookings ?? []).map((booking) => [booking.slot_id, booking.booking_mode]));
+  const sessions = (slots ?? []).map((slot) => {
+    const bookingMode = bookingBySlot.get(slot.id) === "one_to_one" ? "one_to_one" : "group";
+    const startsAt = new Date(slot.starts_at);
+    return {
+      bookingMode,
+      label: bookingMode === "one_to_one" ? "1:1 Personal Training" : "Group Personal Training",
+      price: bookingMode === "one_to_one" ? 50 : 30,
+      fullDate: dateFormatter.format(startsAt),
+      dayLabel: sessionDayFormatter.format(startsAt),
+      date: sessionDateFormatter.format(startsAt),
+      time: `${timeFormatter.format(startsAt)}–${timeFormatter.format(new Date(slot.ends_at))}`,
+    };
+  });
+
+  const firstName = customer.full_name.trim().split(/\s+/)[0] || customer.full_name;
+  const total = moneyFormatter.format((order.total_pence ?? 0) / 100);
+  const plainTextSessions = sessions
+    .map((session) => `${session.fullDate} — ${session.time} · ${session.label} · ${moneyFormatter.format(session.price)}`)
+    .join("\n");
+  const sessionRows = sessions.map((session) => `
+    <tr>
+      <td style="padding:12px 0;border-top:1px solid #EAD9BE;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#3A2E22;" width="52%">
+        <strong>${escapeHtml(session.dayLabel)} ${escapeHtml(session.date)}</strong><br>
+        <span style="color:#7A6C5B;font-size:13px;">${escapeHtml(session.label)}</span>
+      </td>
+      <td align="right" style="padding:12px 0;border-top:1px solid #EAD9BE;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#7A6C5B;" width="30%">
+        ${escapeHtml(session.time)}
+      </td>
+      <td align="right" style="padding:12px 0;border-top:1px solid #EAD9BE;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;color:#3A2E22;" width="18%">
+        ${escapeHtml(moneyFormatter.format(session.price))}
+      </td>
+    </tr>
+  `).join("");
+
+  const resend = new Resend(apiKey);
+  const { error } = await resend.emails.send({
+    from,
+    to: customer.email,
+    replyTo: process.env.BOOKING_ALERT_EMAIL ?? "amber@flowmamanorthfields.com",
+    subject: "Your personal training sessions are confirmed",
+    text: `Hi ${firstName},
+
+Your personal training booking is confirmed.
+
+YOUR SESSIONS
+${plainTextSessions}
+
+${sessions.length} ${sessions.length === 1 ? "session" : "sessions"}
+Total paid: ${total}
+
+Warmly,
+Amber
+
+Questions about your booking? Just reply to this email.`,
+    html: `
+      <!doctype html>
+      <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Your personal training booking is confirmed</title>
+        <!--[if mso]><style>table{border-collapse:collapse}.fallback-font{font-family:Georgia,'Times New Roman',serif!important}</style><![endif]-->
+        <style>
+          body,table,td{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+          img{border:0;line-height:100%;outline:none;text-decoration:none}
+          table{border-collapse:collapse!important}
+          body{margin:0;padding:0;width:100%!important;background-color:#F8EFE0}
+          @media screen and (max-width:600px){.email-container{width:100%!important}.px-fluid{padding-left:20px!important;padding-right:20px!important}}
+        </style>
+      </head>
+      <body style="margin:0;padding:0;background-color:#F8EFE0;">
+        <div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;">Your personal training sessions are booked and paid for.</div>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F8EFE0;">
+          <tr><td align="center" style="padding:32px 16px;">
+            <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background-color:#FFFDF8;border-radius:16px;overflow:hidden;">
+              <tr><td align="center" style="padding:32px 32px 20px;">
+                <img src="https://www.flowmamanorthfields.com/images/logo.svg" width="160" height="51" alt="Flow Mama" style="display:block;width:160px;height:51px;margin:0 auto;border:0;outline:none;text-decoration:none;">
+                <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#7A6C5B;margin-top:4px;">Personal Training &middot; Northfields</div>
+              </td></tr>
+              <tr><td align="center" style="padding:0 32px 8px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td style="background-color:#EAF0E6;color:#5F7A58;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;padding:7px 16px;border-radius:999px;">&#10003; Booking confirmed</td></tr></table></td></tr>
+              <tr><td class="px-fluid" style="padding:20px 40px 0;font-family:Georgia,'Times New Roman',serif;color:#3A2E22;">
+                <p style="margin:0 0 16px;font-size:16px;line-height:1.6;">Hi ${escapeHtml(firstName)},</p>
+                <p style="margin:0;font-size:16px;line-height:1.6;">Your personal training booking is confirmed.</p>
+              </td></tr>
+              <tr><td class="px-fluid" style="padding:28px 40px 0;">
+                <div style="font-family:Georgia,'Times New Roman',serif;font-weight:bold;font-size:16px;color:#3A2E22;margin-bottom:4px;">Your sessions</div>
+                <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#7A6C5B;margin-bottom:14px;">${sessions.length} ${sessions.length === 1 ? "session" : "sessions"}</div>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${sessionRows}</table>
+              </td></tr>
+              <tr><td class="px-fluid" style="padding:20px 40px 0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:2px solid #3A2E22;">
+                <tr><td style="padding:14px 0 18px;font-family:Georgia,'Times New Roman',serif;font-size:17px;font-weight:bold;color:#3A2E22;">Total paid</td><td align="right" style="padding:14px 0 18px;font-family:Georgia,'Times New Roman',serif;font-size:17px;font-weight:bold;color:#3A2E22;">${escapeHtml(total)}</td></tr>
+              </table></td></tr>
+              <tr><td class="px-fluid" style="padding:8px 40px 28px;font-family:Georgia,'Times New Roman',serif;color:#3A2E22;">
+                <p style="margin:0;font-size:15px;line-height:1.6;">Warmly,<br><strong>Amber</strong></p>
+              </td></tr>
+              <tr><td style="padding:22px 40px;background-color:#F8EFE0;font-family:Arial,Helvetica,sans-serif;">
+                <p style="margin:0;font-size:12.5px;color:#7A6C5B;text-align:center;">Questions about your booking? Just reply to this email.</p>
+              </td></tr>
+            </table>
+          </td></tr>
+        </table>
+      </body>
+      </html>
+    `,
+  });
+  if (error) throw new Error(`Resend rejected the personal training confirmation: ${error.message}`);
+}
+
 export async function sendCapacityUnavailableNotice(orderId: string) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM_EMAIL;

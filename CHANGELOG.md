@@ -14,6 +14,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ### Added
 
+- A complete Flow Mama favicon set for browser tabs, bookmarks, Apple devices, and installed shortcuts.
 - A maintained repository changelog and a project rule requiring it to be updated with future pushes.
 - A complete multi-date class booking and Stripe payment flow for Early Flow and Late Flow sessions.
 - Capacity-controlled sessions, a 9pm booking cutoff, and automatic pricing of £22 for 1–5 classes, £16 for 6–9 classes, and £14 for 10 or more classes.
@@ -21,6 +22,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 - A Supabase-backed admin area with overview, session management, customer history, revenue reporting, manual bookings, booking moves, removals, and cancellations.
 - Password-based admin access for the approved Flow Mama administrator.
 - Branded booking-confirmation emails sent through Resend, including booked dates and times, pricing, venue directions, preparation guidance, the health-screening form, and Amber’s sign-off.
+- A simplified branded personal-training confirmation email listing each booked session, its price, and the total paid.
 - Plain-text fallbacks for transactional booking emails.
 - Production and Preview integrations for Supabase, Stripe webhooks, and Resend.
 - A dedicated Stripe sandbox webhook and stable Vercel branch preview for end-to-end test payments.
