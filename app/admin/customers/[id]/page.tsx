@@ -45,7 +45,7 @@ export default async function CustomerPage({ params }: CustomerPageProps) {
 }
 
 function CustomerView({ customer, orders, bookings }: {
-  customer: { full_name: string; email: string | null; phone: string; baby_name: string; baby_age_months: number };
+  customer: { full_name: string; email: string | null; phone: string; baby_name: string | null; baby_age_months: number | null };
   orders: OrderRow[];
   bookings: BookingRow[];
 }) {
@@ -78,7 +78,7 @@ function CustomerView({ customer, orders, bookings }: {
         <article><span>Past classes</span><strong>{past.length}</strong></article>
       </section>
       <section className="admin-detail-grid">
-        <article className="admin-panel admin-contact-card"><div className="admin-panel-heading"><p className="booking-eyebrow">Contact</p><h2>{customer.email ?? "No email address"}</h2></div><dl><div><dt>Phone</dt><dd>{customer.phone}</dd></div><div><dt>{babies.length > 1 ? "Babies" : "Baby"}</dt><dd>{babies.length ? babies.join(" · ") : `${customer.baby_name}, ${customer.baby_age_months} months`}</dd></div></dl></article>
+        <article className="admin-panel admin-contact-card"><div className="admin-panel-heading"><p className="booking-eyebrow">Contact</p><h2>{customer.email ?? "No email address"}</h2></div><dl><div><dt>Phone</dt><dd>{customer.phone}</dd></div>{(babies.length > 0 || customer.baby_name) && <div><dt>{babies.length > 1 ? "Babies" : "Baby"}</dt><dd>{babies.length ? babies.join(" · ") : `${customer.baby_name}, ${customer.baby_age_months} months`}</dd></div>}</dl></article>
         <section className="admin-panel"><div className="admin-panel-heading"><p className="booking-eyebrow">Next up</p><h2>Upcoming bookings</h2></div><div className="admin-table-wrap"><table><thead><tr><th>Date</th><th>Session</th><th>Source</th></tr></thead><tbody>{bookingRows(upcoming)}</tbody></table></div></section>
       </section>
       <section className="admin-panel"><div className="admin-panel-heading"><p className="booking-eyebrow">History</p><h2>Past bookings</h2></div><div className="admin-table-wrap"><table><thead><tr><th>Date</th><th>Session</th><th>Source</th></tr></thead><tbody>{bookingRows(past)}</tbody></table></div></section>

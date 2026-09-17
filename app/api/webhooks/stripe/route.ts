@@ -81,7 +81,7 @@ async function fulfilCheckout(session: Stripe.Checkout.Session, eventId: string)
   const supabase = createSupabaseAdmin();
   const { data: order, error: orderError } = await supabase
     .from("orders")
-    .select("status")
+    .select("status, programmes(slug)")
     .eq("id", orderId)
     .single();
   if (orderError || !order) throw new Error(`Order not found: ${orderError?.message}`);
@@ -142,10 +142,13 @@ async function fulfilCheckout(session: Stripe.Checkout.Session, eventId: string)
     throw error;
   }
 
-  try {
-    await sendBookingConfirmation(orderId);
-  } catch (error) {
-    console.error(`Confirmation email failed for order ${orderId}`, error);
+  const programme = Array.isArray(order.programmes) ? order.programmes[0] : order.programmes;
+  if (programme?.slug !== "group-personal-training") {
+    try {
+      await sendBookingConfirmation(orderId);
+    } catch (error) {
+      console.error(`Confirmation email failed for order ${orderId}`, error);
+    }
   }
 }
 

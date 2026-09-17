@@ -9,6 +9,8 @@ export type AdminSlot = {
   capacity: number;
   bookedCount: number;
   status: string;
+  bookingMode: string | null;
+  allowedBookingModes: string[];
 };
 
 export type AdminOrder = {
@@ -27,7 +29,7 @@ export async function loadAdminDashboard() {
   const [{ data: slotRows, error: slotError }, { data: orderRows, error: orderError }] = await Promise.all([
     supabase
       .from("slots")
-      .select("id, starts_at, capacity, booked_count, status, session_variants(name)")
+      .select("id, starts_at, capacity, booked_count, status, booking_mode, allowed_booking_modes, session_variants(name)")
       .order("starts_at", { ascending: true }),
     supabase
       .from("orders")
@@ -47,6 +49,8 @@ export async function loadAdminDashboard() {
       capacity: row.capacity,
       bookedCount: row.booked_count,
       status: row.status,
+      bookingMode: row.booking_mode ? String(row.booking_mode) : null,
+      allowedBookingModes: (row.allowed_booking_modes ?? []) as string[],
     };
   });
 

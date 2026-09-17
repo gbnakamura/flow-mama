@@ -52,3 +52,27 @@ on conflict (id) do nothing;
 insert into public.admin_users (email_normalized)
 values ('amber@flowmamanorthfields.com')
 on conflict (email_normalized) do nothing;
+
+insert into public.programmes (
+  id, business_id, slug, name, timezone,
+  booking_cutoff_time, booking_cutoff_days, status
+)
+values (
+  '00000000-0000-4000-8000-000000000011',
+  '00000000-0000-4000-8000-000000000001',
+  'group-personal-training',
+  'Personal Training',
+  'Europe/London',
+  '21:00',
+  1,
+  'published'
+)
+on conflict (id) do nothing;
+
+insert into public.session_variants (id, programme_id, slug, name, default_capacity)
+values ('00000000-0000-4000-8000-000000000022', '00000000-0000-4000-8000-000000000011', 'personal-training', 'Personal Training', 3)
+on conflict (id) do nothing;
+
+insert into public.slots (id, session_variant_id, starts_at, ends_at, capacity, allowed_booking_modes)
+values ('00000000-0000-4000-8000-000000000117', '00000000-0000-4000-8000-000000000022', '2026-09-25 09:00:00 Europe/London', '2026-09-25 10:00:00 Europe/London', 3, array['group', 'one_to_one']::text[])
+on conflict (id) do nothing;

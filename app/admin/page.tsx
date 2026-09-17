@@ -6,9 +6,9 @@ import { loadAdminDashboard, type AdminOrder, type AdminSlot } from "@/lib/data/
 export const dynamic = "force-dynamic";
 
 const demoSlots: AdminSlot[] = [
-  { id: "demo-1", startsAt: "2026-09-21T08:20:00.000Z", variantName: "Early Flow", capacity: 8, bookedCount: 5, status: "scheduled" },
-  { id: "demo-2", startsAt: "2026-09-21T10:00:00.000Z", variantName: "Late Flow", capacity: 8, bookedCount: 8, status: "scheduled" },
-  { id: "demo-3", startsAt: "2026-09-28T08:20:00.000Z", variantName: "Early Flow", capacity: 8, bookedCount: 2, status: "scheduled" },
+  { id: "demo-1", startsAt: "2026-09-21T08:20:00.000Z", variantName: "Early Flow", capacity: 8, bookedCount: 5, status: "scheduled", bookingMode: null, allowedBookingModes: [] },
+  { id: "demo-2", startsAt: "2026-09-21T10:00:00.000Z", variantName: "Late Flow", capacity: 8, bookedCount: 8, status: "scheduled", bookingMode: null, allowedBookingModes: [] },
+  { id: "demo-3", startsAt: "2026-09-28T08:20:00.000Z", variantName: "Early Flow", capacity: 8, bookedCount: 2, status: "scheduled", bookingMode: null, allowedBookingModes: [] },
 ];
 
 const demoOrders: AdminOrder[] = [
@@ -41,7 +41,7 @@ export default async function AdminPage() {
       <section className="admin-panel">
         <div className="admin-panel-heading"><div><p className="booking-eyebrow">Schedule</p><h2>Upcoming classes</h2></div></div>
         <div className="admin-table-wrap"><table><thead><tr><th>Date</th><th>Session</th><th>Booked</th><th>Spaces</th><th>Status</th></tr></thead><tbody>
-          {upcoming.map((slot) => <tr key={slot.id}><td><a className="admin-row-link" href={`/admin/sessions/${slot.id}`}>{dateFormatter.format(new Date(slot.startsAt))}</a></td><td>{slot.variantName}</td><td>{slot.bookedCount} / {slot.capacity}</td><td>{Math.max(0, slot.capacity - slot.bookedCount)}</td><td><span className={slot.status === "cancelled" || slot.bookedCount >= slot.capacity ? "admin-badge sold" : "admin-badge"}>{slot.status === "cancelled" ? "Cancelled" : slot.bookedCount >= slot.capacity ? "Full" : "Open"}</span></td></tr>)}
+          {upcoming.map((slot) => <tr key={slot.id}><td><a className="admin-row-link" href={`/admin/sessions/${slot.id}`}>{dateFormatter.format(new Date(slot.startsAt))}</a></td><td>{slot.variantName}{slot.allowedBookingModes.length > 0 && <small>{slot.bookingMode === "one_to_one" ? "Locked to 1:1" : slot.bookingMode === "group" ? "Locked to group" : slot.allowedBookingModes.length === 2 ? "Group + 1:1" : slot.allowedBookingModes[0] === "one_to_one" ? "1:1 only" : "Group only"}</small>}</td><td>{slot.bookedCount} / {slot.bookingMode === "one_to_one" ? 1 : slot.capacity}</td><td>{slot.bookingMode === "one_to_one" ? 0 : Math.max(0, slot.capacity - slot.bookedCount)}</td><td><span className={slot.status === "cancelled" || slot.bookedCount >= slot.capacity || slot.bookingMode === "one_to_one" ? "admin-badge sold" : "admin-badge"}>{slot.status === "cancelled" ? "Cancelled" : slot.bookingMode === "one_to_one" ? "1:1 booked" : slot.bookedCount >= slot.capacity ? "Full" : slot.bookingMode === "group" ? "Group open" : "Open"}</span></td></tr>)}
         </tbody></table></div>
       </section>
 

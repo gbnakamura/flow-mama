@@ -25,6 +25,9 @@ This file records meaningful changes to the Flow Mama website and booking system
 - Production and Preview integrations for Supabase, Stripe webhooks, and Resend.
 - A dedicated Stripe sandbox webhook and stable Vercel branch preview for end-to-end test payments.
 - An existing-customer picker for manual admin bookings, so saved contact and baby details can be reused.
+- A `/personal-training` checkout for £30 group sessions and £50 one-to-one sessions, with multi-date selection and adult contact details.
+- Shared personal-training availability that can be published as Group + 1:1, Group only, or 1:1 only.
+- Automatic personal-training slot locking: the first paid booking determines Group or 1:1 for dual-purpose times, preventing conflicting bookings.
 
 ### Changed
 
@@ -34,6 +37,8 @@ This file records meaningful changes to the Flow Mama website and booking system
 - The confirmation form no longer includes the separate postnatal-participation confirmation checkbox.
 - The Terms and Conditions page now uses the supplied Flow Mama Terms & Conditions of Service.
 - Manual admin bookings can be created without an email address.
+- The admin availability form now supports choosing a programme and controlling which personal-training booking types each new time allows.
+- Personal-training customers can be added manually from the existing customer directory without baby details.
 
 ### Fixed
 

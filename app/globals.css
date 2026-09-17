@@ -94,6 +94,11 @@ a { color: inherit; }
 .pricing-tiers span { color: var(--ink-soft); font-size: 0.9rem; }
 .pricing-tiers strong { color: var(--coral-deep); font-family: var(--display); font-size: 1.8rem; line-height: 1.1; }
 .pricing-tiers small { color: var(--ink-soft); font-size: 0.76rem; }
+.pt-price-overview { max-width: 520px; margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pt-price-overview > div { min-height: 92px; padding: 13px 17px; display: grid; align-content: center; border: 1.5px solid var(--line); border-radius: 15px; background: rgba(255, 250, 242, 0.72); }
+.pt-price-overview span { color: var(--ink-soft); font-size: .86rem; }
+.pt-price-overview strong { color: var(--coral-deep); font-family: var(--display); font-size: 1.8rem; line-height: 1.1; }
+.pt-price-overview small { color: var(--ink-soft); font-size: .74rem; }
 
 .booking-layout {
   max-width: 1180px;
@@ -162,6 +167,17 @@ a { color: inherit; }
 }
 
 .is-selected .check-mark { border-color: var(--coral-deep); background: var(--coral-deep); }
+.pt-session-row { grid-template-columns: auto minmax(150px, 1fr) auto; cursor: default; }
+.pt-session-row.is-sold-out { opacity: .65; }
+.pt-session-row:hover { transform: none; }
+.session-details small { color: var(--sage-deep); font-size: .72rem; font-weight: 600; }
+.pt-mode-options { display: flex; gap: 8px; }
+.pt-mode-options button { min-width: 90px; min-height: 54px; padding: 7px 12px; display: grid; align-content: center; gap: 1px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--cream-light); color: var(--ink); cursor: pointer; }
+.pt-mode-options button span { display: flex; align-items: center; justify-content: center; gap: 4px; color: var(--ink-soft); font-size: .72rem; }
+.pt-mode-options button strong { font-family: var(--display); font-size: 1rem; }
+.pt-mode-options button.is-selected { border-color: var(--coral-deep); background: var(--coral-deep); color: white; }
+.pt-mode-options button.is-selected span { color: white; }
+.pt-mode-options button:disabled { cursor: not-allowed; opacity: .38; }
 
 .booking-summary {
   position: sticky;
@@ -438,6 +454,9 @@ a { color: inherit; }
   .roster-actions form { width: 100%; }
   .roster-actions select { flex: 1; min-width: 0; }
   .manual-booking-form { grid-template-columns: 1fr 1fr; }
+  .pt-session-row { grid-template-columns: auto 1fr; }
+  .pt-mode-options { grid-column: 1 / -1; }
+  .pt-mode-options button { flex: 1; }
 }
 
 @media (max-width: 560px) {
@@ -451,6 +470,8 @@ a { color: inherit; }
   .pricing-tiers > div { min-height: 84px; padding: 10px; }
   .pricing-tiers span { font-size: 0.78rem; }
   .pricing-tiers strong { font-size: 1.55rem; }
+  .pt-price-overview { grid-template-columns: 1fr 1fr; }
+  .pt-price-overview > div { padding: 10px 12px; }
   .section-heading-row { display: grid; gap: 8px; }
   .session-row { grid-template-columns: auto minmax(0, 1fr) 22px; gap: 12px; padding-right: 14px; }
   .availability { grid-column: 2; }

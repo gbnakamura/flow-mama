@@ -7,6 +7,14 @@ export type AvailabilitySlot = {
   available: boolean;
 };
 
+export type PersonalTrainingBookingMode = "group" | "one_to_one";
+
+export type PersonalTrainingAvailabilitySlot = AvailabilitySlot & {
+  allowedBookingModes: PersonalTrainingBookingMode[];
+  bookingMode: PersonalTrainingBookingMode | null;
+  spacesRemaining: number;
+};
+
 export type CheckoutCustomer = {
   fullName: string;
   email: string;
