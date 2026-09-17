@@ -32,6 +32,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ### Changed
 
+- Group and 1:1 personal-training price choices now have a clearer interactive hover state.
 - The booking page now explains pricing tiers before customers select their classes.
 - The booking summary shows the customer’s saving once discounted pricing applies.
 - The booking-page introduction is more compact while preserving the original navigation and logo sizing.

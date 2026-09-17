@@ -172,12 +172,17 @@ a { color: inherit; }
 .pt-session-row:hover { transform: none; }
 .session-details small { color: var(--sage-deep); font-size: .72rem; font-weight: 600; }
 .pt-mode-options { display: flex; gap: 8px; }
-.pt-mode-options button { min-width: 90px; min-height: 54px; padding: 7px 12px; display: grid; align-content: center; gap: 1px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--cream-light); color: var(--ink); cursor: pointer; }
+.pt-mode-options button { min-width: 90px; min-height: 54px; padding: 7px 12px; display: grid; align-content: center; gap: 1px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--cream-light); color: var(--ink); cursor: pointer; transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease; }
 .pt-mode-options button span { display: flex; align-items: center; justify-content: center; gap: 4px; color: var(--ink-soft); font-size: .72rem; }
 .pt-mode-options button strong { font-family: var(--display); font-size: 1rem; }
 .pt-mode-options button.is-selected { border-color: var(--coral-deep); background: var(--coral-deep); color: white; }
 .pt-mode-options button.is-selected span { color: white; }
 .pt-mode-options button:disabled { cursor: not-allowed; opacity: .38; }
+.pt-mode-options button:focus-visible { outline: 3px solid color-mix(in srgb, var(--coral) 35%, transparent); outline-offset: 3px; }
+@media (hover: hover) {
+  .pt-mode-options button:not(:disabled):hover { transform: translateY(-2px); border-color: var(--coral); background: var(--coral-pale); box-shadow: 0 8px 18px rgba(218, 105, 91, 0.14); }
+  .pt-mode-options button.is-selected:not(:disabled):hover { border-color: var(--coral-deep); background: var(--coral-deep); box-shadow: 0 8px 18px rgba(218, 105, 91, 0.22); }
+}
 
 .booking-summary {
   position: sticky;
