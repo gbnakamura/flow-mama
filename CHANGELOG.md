@@ -43,6 +43,7 @@ No unreleased changes.
 
 ### Changed
 
+- Updated the Flow Mama session summary language from “booking” to “cart” so it is clearer that customers are building a multi-session purchase.
 - Documented the required Stripe price settings for Group and 1:1 Personal Training deployments.
 - Group and 1:1 personal-training price choices now have a clearer interactive hover state.
 - The booking page now explains pricing tiers before customers select their classes.

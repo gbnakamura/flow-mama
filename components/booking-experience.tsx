@@ -284,7 +284,7 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
         </section>
 
         <aside ref={summaryRef} className="booking-summary" aria-label="Booking summary">
-          <p className="summary-kicker">Your booking</p>
+          <p className="summary-kicker">Your cart</p>
           <div className="summary-count">
             <strong>{selected.size}</strong>
             <span>{selected.size === 1 ? "class selected" : "classes selected"}</span>
@@ -332,11 +332,11 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
           onClick={showSummary}
           aria-hidden={summaryVisible}
           tabIndex={summaryVisible ? -1 : 0}
-          aria-label={`View booking summary: ${selected.size} ${selected.size === 1 ? "class" : "classes"}, £${total.toFixed(2)} total`}
+          aria-label={`View cart: ${selected.size} ${selected.size === 1 ? "class" : "classes"}, £${total.toFixed(2)} total`}
         >
           <span className="mobile-cart-icon"><ShoppingBag aria-hidden="true" size={19} /></span>
           <span className="mobile-cart-copy">
-            <strong>View booking</strong>
+            <strong>View cart</strong>
             <small>{selected.size} {selected.size === 1 ? "class" : "classes"} selected</small>
           </span>
           <strong className="mobile-cart-total">£{total.toFixed(2)}</strong>
