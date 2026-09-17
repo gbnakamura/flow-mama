@@ -12,7 +12,14 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
-No unreleased changes.
+### Added
+
+- An Analytics tab in the admin navigation showing visitors, page views, popular pages, referral sources, device usage, paid bookings, and an estimated booking rate.
+
+### Changed
+
+- Added privacy-conscious Vercel traffic collection while excluding admin, authentication, and booking-success pages.
+- Updated site analytics with an interactive daily visitors and page-views graph inspired by the Vercel dashboard.
 
 ## 2026-09-17 — Booking, payments and admin system
 
