@@ -1,11 +1,11 @@
-import { CalendarPlus, ChartNoAxesColumnIncreasing, LayoutDashboard, Users } from "lucide-react";
+import { CalendarPlus, ChartNoAxesColumnIncreasing, LayoutDashboard, Mail, Users } from "lucide-react";
 import { signOutAdmin } from "@/app/admin/actions";
 import type { AdminProgrammeFilter } from "@/lib/admin/programme-filter";
 
 type AdminHeaderProps = {
   title: string;
   eyebrow?: string;
-  active?: "overview" | "customers" | "revenue" | "availability";
+  active?: "overview" | "customers" | "revenue" | "emails" | "availability";
   programme?: AdminProgrammeFilter;
 };
 
@@ -22,6 +22,7 @@ export function AdminHeader({ title, eyebrow = "Admin", active = "overview", pro
         <a className={active === "overview" ? "active" : undefined} aria-current={active === "overview" ? "page" : undefined} href={`/admin${programmeQuery}`}><LayoutDashboard size={16} /> Overview</a>
         <a className={active === "customers" ? "active" : undefined} aria-current={active === "customers" ? "page" : undefined} href={`/admin/customers${programmeQuery}`}><Users size={16} /> Customers</a>
         <a className={active === "revenue" ? "active" : undefined} aria-current={active === "revenue" ? "page" : undefined} href={`/admin/revenue${programmeQuery}`}><ChartNoAxesColumnIncreasing size={16} /> Revenue</a>
+        <a className={active === "emails" ? "active" : undefined} aria-current={active === "emails" ? "page" : undefined} href="/admin/email-previews"><Mail size={16} /> Email previews</a>
         <a className={`admin-nav-primary${active === "availability" ? " active" : ""}`} aria-current={active === "availability" ? "page" : undefined} href="/admin/availability/new"><CalendarPlus size={16} /> New availability</a>
       </nav>
     </>
