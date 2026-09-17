@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { AdminHeader } from "@/components/admin-header";
 import { requireAdmin } from "@/lib/auth/admin";
-import { sendPersonalTrainingTestConfirmation } from "@/lib/email";
+import { sendFlowMamaTestConfirmation, sendPersonalTrainingTestConfirmation } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
@@ -27,8 +27,25 @@ async function sendPersonalTrainingPreview(formData: FormData) {
   redirect(`/admin/email-previews?sent=${encodeURIComponent(parsed.data.email)}`);
 }
 
+async function sendFlowMamaPreview(formData: FormData) {
+  "use server";
+
+  await requireAdmin();
+  const parsed = previewSchema.safeParse({ email: formData.get("email") });
+  if (!parsed.success) redirect("/admin/email-previews?error=email");
+
+  try {
+    await sendFlowMamaTestConfirmation(parsed.data.email);
+  } catch (error) {
+    console.error("Unable to send Flow Mama email preview", error);
+    redirect("/admin/email-previews?error=send");
+  }
+
+  redirect(`/admin/email-previews?sent=${encodeURIComponent(parsed.data.email)}&template=Flow+Mama`);
+}
+
 type EmailPreviewsPageProps = {
-  searchParams: Promise<{ sent?: string; error?: string }>;
+  searchParams: Promise<{ sent?: string; error?: string; template?: string }>;
 };
 
 export default async function EmailPreviewsPage({ searchParams }: EmailPreviewsPageProps) {
@@ -38,8 +55,20 @@ export default async function EmailPreviewsPage({ searchParams }: EmailPreviewsP
   return (
     <main className="admin-shell">
       <AdminHeader title="Email previews" eyebrow="Communications" active="emails" />
-      {params.sent && <p className="admin-success">Personal Training preview sent to {params.sent}.</p>}
+      {params.sent && <p className="admin-success">{params.template ?? "Personal Training"} preview sent to {params.sent}.</p>}
       {params.error && <p className="form-error">{params.error === "email" ? "Enter a valid recipient email address." : "The preview could not be sent. Please try again."}</p>}
+
+      <section className="admin-panel admin-email-preview-panel">
+        <div className="admin-panel-heading">
+          <p className="booking-eyebrow">Flow Mama</p>
+          <h2>Booking confirmation</h2>
+          <p>Send the branded confirmation with safe sample Early Flow sessions, venue guidance, preparation notes, and the health-screening link.</p>
+        </div>
+        <form action={sendFlowMamaPreview} className="admin-email-preview-form">
+          <label>Send preview to<input required type="email" name="email" defaultValue="guy.nakamura@gmail.com" placeholder="name@example.com" /></label>
+          <button className="pay-button" type="submit">Send test email</button>
+        </form>
+      </section>
 
       <section className="admin-panel admin-email-preview-panel">
         <div className="admin-panel-heading">
