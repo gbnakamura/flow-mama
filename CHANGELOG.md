@@ -28,7 +28,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 - A `/personal-training` checkout for £30 group sessions and £50 one-to-one sessions, with multi-date selection and adult contact details.
 - Shared personal-training availability that can be published as Group + 1:1, Group only, or 1:1 only.
 - Automatic personal-training slot locking: the first paid booking determines Group or 1:1 for dual-purpose times, preventing conflicting bookings.
-- One-off session publishing in the admin dashboard, alongside the existing recurring weekly schedule.
+- A single admin availability form with a One-off / Recurring switch, showing only the scheduling fields needed for the selected option.
 
 ### Changed
 
