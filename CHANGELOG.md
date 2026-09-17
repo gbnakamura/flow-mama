@@ -14,6 +14,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ### Added
 
+- Programme filters across the admin overview, customer directory, and revenue reporting, with separate Flow Mama and Personal Training totals, schedules, customers, payments, and weekly chart series.
 - A complete Flow Mama favicon set for browser tabs, bookmarks, Apple devices, and installed shortcuts.
 - A maintained repository changelog and a project rule requiring it to be updated with future pushes.
 - A complete multi-date class booking and Stripe payment flow for Early Flow and Late Flow sessions.

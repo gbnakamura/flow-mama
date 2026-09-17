@@ -11,6 +11,7 @@ export type AdminSlot = {
   status: string;
   bookingMode: string | null;
   allowedBookingModes: string[];
+  programmeSlug: string;
 };
 
 export type AdminOrder = {
@@ -22,6 +23,7 @@ export type AdminOrder = {
   totalPence: number;
   refundedPence: number;
   status: string;
+  programmeSlug: string;
 };
 
 export async function loadAdminDashboard() {
@@ -29,11 +31,11 @@ export async function loadAdminDashboard() {
   const [{ data: slotRows, error: slotError }, { data: orderRows, error: orderError }] = await Promise.all([
     supabase
       .from("slots")
-      .select("id, starts_at, capacity, booked_count, status, booking_mode, allowed_booking_modes, session_variants(name)")
+      .select("id, starts_at, capacity, booked_count, status, booking_mode, allowed_booking_modes, session_variants(name,programmes(slug))")
       .order("starts_at", { ascending: true }),
     supabase
       .from("orders")
-      .select("id, created_at, quantity, total_pence, refunded_pence, status, customers(full_name, email)")
+      .select("id, created_at, quantity, total_pence, refunded_pence, status, customers(full_name, email), programmes(slug)")
       .order("created_at", { ascending: false })
       .limit(50),
   ]);
@@ -42,6 +44,9 @@ export async function loadAdminDashboard() {
 
   const slots: AdminSlot[] = (slotRows ?? []).map((row) => {
     const variant = Array.isArray(row.session_variants) ? row.session_variants[0] : row.session_variants;
+    const programme = variant && "programmes" in variant
+      ? (Array.isArray(variant.programmes) ? variant.programmes[0] : variant.programmes)
+      : null;
     return {
       id: row.id,
       startsAt: row.starts_at,
@@ -51,11 +56,13 @@ export async function loadAdminDashboard() {
       status: row.status,
       bookingMode: row.booking_mode ? String(row.booking_mode) : null,
       allowedBookingModes: (row.allowed_booking_modes ?? []) as string[],
+      programmeSlug: programme && "slug" in programme ? String(programme.slug) : "flow-mama-autumn-2026",
     };
   });
 
   const orders: AdminOrder[] = (orderRows ?? []).map((row) => {
     const customer = Array.isArray(row.customers) ? row.customers[0] : row.customers;
+    const programme = Array.isArray(row.programmes) ? row.programmes[0] : row.programmes;
     return {
       id: row.id,
       createdAt: row.created_at,
@@ -65,6 +72,7 @@ export async function loadAdminDashboard() {
       totalPence: row.total_pence ?? 0,
       refundedPence: row.refunded_pence ?? 0,
       status: row.status,
+      programmeSlug: programme && "slug" in programme ? String(programme.slug) : "flow-mama-autumn-2026",
     };
   });
 

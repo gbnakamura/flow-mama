@@ -354,6 +354,11 @@ a { color: inherit; }
 .admin-nav .admin-nav-primary { margin-left: auto; background: var(--coral-deep); color: white; }
 .admin-nav .admin-nav-primary.active { box-shadow: 0 0 0 3px rgba(217, 111, 96, 0.24); }
 .admin-demo-note { max-width: 1240px; margin: -12px auto 22px; padding: 11px 14px; border-radius: 9px; background: #f8ddd6; color: #7c433a; font-size: 0.84rem; }
+.admin-programme-filter-bar { max-width: 1240px; margin: 0 auto 20px; }
+.admin-programme-filter { width: fit-content; max-width: 100%; padding: 4px; display: flex; gap: 3px; overflow-x: auto; border: 1px solid var(--line); border-radius: 999px; background: white; }
+.admin-programme-filter a { min-height: 37px; padding: 8px 15px; display: inline-flex; align-items: center; border-radius: 999px; color: var(--ink-soft); font-size: 0.82rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.admin-programme-filter a:hover { color: var(--ink); background: var(--cream); }
+.admin-programme-filter a.active { color: white; background: var(--ink); box-shadow: 0 2px 8px rgba(43, 42, 37, .16); }
 .admin-stats { max-width: 1240px; margin: 0 auto 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .admin-stats article { min-height: 138px; padding: 22px; display: grid; grid-template-columns: 1fr auto; align-items: start; border: 1px solid var(--line); border-radius: 18px; background: white; }
 .admin-stats svg { color: var(--coral-deep); }
@@ -405,8 +410,13 @@ a { color: inherit; }
 .revenue-bar-column { min-width: 58px; height: 240px; display: grid; grid-template-rows: 24px 1fr 24px; gap: 5px; text-align: center; }
 .revenue-bar-column strong { font-size: 0.75rem; }
 .revenue-bar-column small { color: var(--ink-soft); }
-.revenue-bar-track { display: flex; align-items: end; justify-content: center; }
-.revenue-bar-track span { width: 38px; min-height: 8px; border-radius: 9px 9px 3px 3px; background: var(--coral-deep); }
+.revenue-bar-track { display: flex; align-items: end; justify-content: center; gap: 5px; }
+.revenue-bar-track span { width: 28px; border-radius: 9px 9px 3px 3px; background: var(--coral-deep); }
+.revenue-bar-track span.personal-training { background: var(--sage-deep); }
+.revenue-legend { display: flex; flex-wrap: wrap; gap: 10px 16px; color: var(--ink-soft); font-size: .76rem; }
+.revenue-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.revenue-legend i { width: 10px; height: 10px; display: inline-block; border-radius: 3px; background: var(--coral-deep); }
+.revenue-legend i.personal-training { background: var(--sage-deep); }
 .admin-detail-grid { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(260px, .65fr) minmax(0, 1.35fr); gap: 22px; }
 .admin-detail-grid .admin-panel { width: 100%; }
 .admin-contact-card dl { margin: 0; padding: 0 24px 24px; display: grid; gap: 14px; }
@@ -456,6 +466,8 @@ a { color: inherit; }
   .booking-summary { position: static; order: -1; }
   .booking-intro { padding-bottom: 34px; }
   .admin-stats { grid-template-columns: 1fr; }
+  .admin-programme-filter { width: 100%; }
+  .admin-programme-filter a { flex: 1; justify-content: center; }
   .admin-stats-four { grid-template-columns: 1fr 1fr; }
   .admin-detail-grid { grid-template-columns: 1fr; gap: 0; }
   .admin-form-grid { grid-template-columns: 1fr 1fr; }
