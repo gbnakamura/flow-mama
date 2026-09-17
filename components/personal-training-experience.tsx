@@ -92,7 +92,7 @@ export function PersonalTrainingExperience({ slots }: Props) {
       <div className="booking-layout">
         <section aria-labelledby={step === "dates" ? "dates-heading" : "details-heading"}>
           {step === "dates" ? <>
-            <div className="section-heading-row"><div><p className="step-label">Step 1 of 2</p><h2 id="dates-heading">Select your sessions</h2></div><p className="cutoff-note">Bookings close 72 hours before each session</p></div>
+            <div className="section-heading-row"><div><p className="step-label">Step 1 of 2</p><h2 id="dates-heading">Select your sessions</h2></div></div>
             {sessions.length ? <div className="session-list pt-session-list">{sessions.map((session) => {
               const selectedMode = selected[session.id];
               const groupAvailable = session.available && session.allowedBookingModes.includes("group") && (!session.bookingMode || session.bookingMode === "group") && session.spacesRemaining > 0;

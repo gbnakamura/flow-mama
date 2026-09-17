@@ -27,6 +27,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 - Replaced free-text session naming with consistent Early Flow, Late Flow, and Personal Training options when creating availability.
 - Changed Personal Training bookings to close exactly 72 hours before each session and clarified the group confirmation and refund process.
 - Added a live remaining-spots count to every Personal Training session that is available for group bookings.
+- Removed the visible Personal Training cutoff reminder while continuing to enforce the 72-hour cutoff during booking.
 
 ## 2026-09-17 — Booking, payments and admin system
 
