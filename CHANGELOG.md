@@ -12,6 +12,10 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
+No unreleased changes.
+
+## 2026-09-17 — Booking, payments and admin system
+
 ### Added
 
 - An admin-only Email previews screen for sending clearly labelled Flow Mama and Personal Training confirmation tests without creating bookings, payments, scripts, or temporary API keys.
