@@ -154,6 +154,7 @@ Note: I provide all the yoga mats and props, so no need to lug yours around!
 
 IMPORTANT: YOUR HEALTH SCREENING FORM
 Because my number one priority is your safe postnatal recovery, my insurance requires every mama to fill out a quick health questionnaire before stepping onto the mat. Please fill this out before our first session so I can tailor the movements to support you perfectly.
+Complete the form: https://docs.google.com/forms/d/e/1FAIpQLSfJZ7qgqo3uk3QVpmZK7oEdepXRIHfJ3tBSi8Hv9vbqOZzdQw/viewform?pli=1
 
 See you soon,
 Amber
@@ -206,7 +207,7 @@ Questions about your booking? Reply to this email or message @flowmamanorthfield
                 </div>
                 <div style="border-top:1px solid #EAD9BE;margin-top:18px;padding-top:18px;">
                   <div style="font-size:14.5px;font-weight:bold;line-height:1.5;margin-bottom:8px;">📋 IMPORTANT: Your Health Screening Form</div>
-                  <div style="font-size:14.5px;line-height:1.6;">Because my number one priority is your safe postnatal recovery, my insurance requires every mama to fill out a quick health questionnaire before stepping onto the mat. Please fill this out before our first session so I can tailor the movements to support you perfectly.</div>
+                  <div style="font-size:14.5px;line-height:1.6;">Because my number one priority is your safe postnatal recovery, my insurance requires every mama to fill out a quick <a href="https://docs.google.com/forms/d/e/1FAIpQLSfJZ7qgqo3uk3QVpmZK7oEdepXRIHfJ3tBSi8Hv9vbqOZzdQw/viewform?pli=1" style="color:#E2734A;font-weight:bold;text-decoration:underline;">health questionnaire</a> before stepping onto the mat. Please fill this out before our first session so I can tailor the movements to support you perfectly.</div>
                 </div>
               </td></tr></table></td></tr>
               <tr><td class="px-fluid" style="padding:28px 40px 0;">
