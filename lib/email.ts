@@ -156,7 +156,11 @@ IMPORTANT: YOUR HEALTH SCREENING FORM
 Because my number one priority is your safe postnatal recovery, my insurance requires every mama to fill out a quick health questionnaire before stepping onto the mat. Please fill this out before our first session so I can tailor the movements to support you perfectly.
 Complete the form: https://docs.google.com/forms/d/e/1FAIpQLSfJZ7qgqo3uk3QVpmZK7oEdepXRIHfJ3tBSi8Hv9vbqOZzdQw/viewform?pli=1
 
-See you soon,
+If you have any questions at all, just hit reply. Otherwise, I will see you on the mat!
+
+If you would like me to add you to the Flow Mama WhatsApp group where we share info on upcoming social events and general mum chat, please let me know.
+
+Warmly,
 Amber
 
 Questions about your booking? Reply to this email or message @flowmamanorthfields on Instagram.`,
@@ -219,7 +223,11 @@ Questions about your booking? Reply to this email or message @flowmamanorthfield
                 <tr><td style="padding:14px 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#7A6C5B;">${classCount} ${classCount === 1 ? "class" : "classes"} &times; ${escapeHtml(pricePerClass)}</td><td align="right" style="padding:14px 0 4px;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#7A6C5B;">${escapeHtml(total)}</td></tr>
                 <tr><td style="padding:2px 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:17px;font-weight:bold;color:#3A2E22;">Total paid</td><td align="right" style="padding:2px 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:17px;font-weight:bold;color:#3A2E22;">${escapeHtml(total)}</td></tr>
               </table></td></tr>
-              <tr><td class="px-fluid" style="padding:8px 40px 28px;font-family:Georgia,'Times New Roman',serif;color:#3A2E22;"><p style="margin:0;font-size:15px;line-height:1.6;">See you soon,<br>Amber</p></td></tr>
+              <tr><td class="px-fluid" style="padding:8px 40px 28px;font-family:Georgia,'Times New Roman',serif;color:#3A2E22;">
+                <p style="margin:0 0 14px;font-size:15px;line-height:1.6;">If you have any questions at all, just hit reply. Otherwise, I will see you on the mat!</p>
+                <p style="margin:0 0 14px;font-size:15px;line-height:1.6;">If you would like me to add you to the Flow Mama WhatsApp group where we share info on upcoming social events and general mum chat, please let me know.</p>
+                <p style="margin:0;font-size:15px;line-height:1.6;">Warmly,<br><strong>Amber</strong></p>
+              </td></tr>
               <tr><td style="padding:22px 40px;background-color:#F8EFE0;font-family:Arial,Helvetica,sans-serif;">
                 <p style="margin:0 0 6px;font-size:12.5px;color:#7A6C5B;text-align:center;">Questions about your booking? Just reply to this email, or message us on Instagram <a href="https://instagram.com/flowmamanorthfields" style="color:#E2734A;text-decoration:none;">@flowmamanorthfields</a>.</p>
                 <p style="margin:0;font-size:11.5px;color:#A6987E;text-align:center;">Flow Mama Northfields &middot; Northfields Community Centre, W13 9SS</p>
