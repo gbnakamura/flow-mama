@@ -43,6 +43,7 @@ No unreleased changes.
 
 ### Changed
 
+- Centred the Flow Mama logo in the mobile booking header and moved the back control to the conventional top-left position.
 - Updated the Flow Mama session summary language from “booking” to “cart” so it is clearer that customers are building a multi-session purchase.
 - Documented the required Stripe price settings for Group and 1:1 Personal Training deployments.
 - Group and 1:1 personal-training price choices now have a clearer interactive hover state.
