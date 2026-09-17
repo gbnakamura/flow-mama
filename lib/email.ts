@@ -193,7 +193,7 @@ Questions about your booking? Reply to this email or message @flowmamanorthfield
                 <p style="margin:0 0 4px;font-size:16px;line-height:1.6;font-weight:bold;">Here is everything you need to know ahead of your first session:</p>
               </td></tr>
               <tr><td class="px-fluid" style="padding:12px 40px 4px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F8EFE0;border-radius:12px;"><tr><td style="padding:20px 22px;font-family:Arial,Helvetica,sans-serif;color:#3A2E22;">
-                <div style="font-size:11px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;color:#7A6C5B;margin-bottom:8px;">The Venue</div>
+                <div style="font-size:11px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;color:#7A6C5B;margin-bottom:8px;">📍 The Venue</div>
                 <div style="font-size:14.5px;line-height:1.6;"><strong>${escapeHtml(venueName)}.</strong> <a href="${escapeHtml(mapsUrl)}" style="color:#E2734A;text-decoration:none;">Open in Google Maps</a><br>There is a covered buggy park outside to park your buggy safely. Limited parking spaces are also available outside the community centre.<br><br>On entering the building, go through the first door on the left and make your way through the kitchen area to the door at the end. Once through this door, walk down the corridor and you will find Room 2.</div>
                 <div style="border-top:1px solid #EAD9BE;margin-top:18px;padding-top:18px;">
                   <div style="font-size:14.5px;font-weight:bold;line-height:1.5;margin-bottom:8px;">🎒 What to bring:</div>
