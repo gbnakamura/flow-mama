@@ -406,6 +406,14 @@ a { color: inherit; }
 .manual-booking-form { padding: 5px 24px 25px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
 .manual-booking-form label { display: grid; gap: 6px; color: var(--ink-soft); font-size: .78rem; font-weight: 600; }
 .manual-booking-form .pay-button { align-self: end; }
+.manual-booking-subsection { padding: 4px 24px 0; }
+.manual-booking-subsection h3 { margin: 0 0 4px; font-family: var(--display); font-size: 1.08rem; }
+.manual-booking-subsection > p { margin: 0 0 14px; color: var(--ink-soft); font-size: .86rem; }
+.manual-booking-subsection .admin-empty { padding: 0 0 23px; }
+.manual-booking-form-existing { padding: 0 0 23px; }
+.manual-booking-divider { display: flex; align-items: center; gap: 12px; padding: 0 24px 18px; color: var(--ink-soft); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.manual-booking-divider::before, .manual-booking-divider::after { content: ""; height: 1px; flex: 1; background: var(--line); }
+.manual-booking-divider span { white-space: nowrap; }
 .admin-danger-panel { border-color: rgba(138,52,44,.25); }
 .admin-danger-panel form { padding: 4px 24px 24px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
 .admin-danger-panel form label { color: var(--ink-soft); font-size: .86rem; }

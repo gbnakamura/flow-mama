@@ -58,6 +58,24 @@ async function addManualBooking(formData: FormData) {
   redirect(`/admin/sessions/${slotId}?result=added`);
 }
 
+async function addExistingCustomerBooking(formData: FormData) {
+  "use server";
+  const admin = await requireAdmin();
+  if (admin.preview) redirect("/admin?preview=1");
+  const slotId = String(formData.get("slotId") ?? "");
+  const customerId = String(formData.get("customerId") ?? "");
+  const { data, error } = await createSupabaseAdmin().rpc("add_existing_customer_booking", {
+    p_slot_id: slotId,
+    p_customer_id: customerId,
+    p_payment_type: String(formData.get("paymentType") ?? "payment_due"),
+    p_admin_email: admin.email,
+  });
+  if (error) redirect(`/admin/sessions/${slotId}?error=add`);
+  if (!data?.ok) redirect(`/admin/sessions/${slotId}?error=${data?.reason === "capacity_unavailable" ? "full" : "add"}`);
+  revalidatePath(`/admin/sessions/${slotId}`);
+  redirect(`/admin/sessions/${slotId}?result=added`);
+}
+
 async function cancelSession(formData: FormData) {
   "use server";
   const admin = await requireAdmin();
@@ -84,7 +102,10 @@ export default async function SessionDetailPage({ params, searchParams }: Sessio
     return <SessionView preview slot={{ id, startsAt: "2026-09-21T08:20:00.000Z", variantName: "Early Flow", capacity: 8, bookedCount: 2, status: "scheduled" }} bookings={[
       { id: "preview-1", name: "Preview customer", email: "mama@example.com", phone: "07123 456789", baby: "Mia, 5 months", payment: "Paid · £96.00", bookingSummary: "6 classes booked" },
       { id: "preview-2", name: "Manual booking", email: "hello@example.com", phone: "07999 123456", baby: "Leo, 3 months", payment: "Cash", bookingSummary: "Manual booking" },
-    ]} otherSlots={[]} message={message} />;
+    ]} otherSlots={[]} existingCustomers={[
+      { id: "preview-customer-1", label: "Anna Taylor — Mia — mama@example.com" },
+      { id: "preview-customer-2", label: "Sophie Green — Leo — 07999 123456" },
+    ]} message={message} />;
   }
 
   const supabase = createSupabaseAdmin();
@@ -121,6 +142,13 @@ export default async function SessionDetailPage({ params, searchParams }: Sessio
     .gt("starts_at", new Date().toISOString())
     .order("starts_at", { ascending: true });
 
+  const { data: customerRows, error: customerError } = await supabase
+    .from("customers")
+    .select("id, full_name, email, phone, baby_name")
+    .order("full_name", { ascending: true })
+    .limit(500);
+  if (customerError) throw new Error(`Unable to load customers: ${customerError.message}`);
+
   const variant = Array.isArray(slot.session_variants) ? slot.session_variants[0] : slot.session_variants;
   const bookings = (bookingRows ?? []).map((row) => {
     const customer = Array.isArray(row.customers) ? row.customers[0] : row.customers;
@@ -146,7 +174,16 @@ export default async function SessionDetailPage({ params, searchParams }: Sessio
     return { id: row.id, label: `${rowVariant && "name" in rowVariant ? String(rowVariant.name) : "Flow Mama"} — ${dateFormatter.format(new Date(row.starts_at))}` };
   });
 
-  return <SessionView preview={false} slot={{ id: slot.id, startsAt: slot.starts_at, variantName: variant && "name" in variant ? String(variant.name) : "Flow Mama", capacity: slot.capacity, bookedCount: slot.booked_count, status: slot.status }} bookings={bookings} otherSlots={otherSlots} message={message} />;
+  const existingCustomers = (customerRows ?? []).map((customer) => ({
+    id: customer.id,
+    label: [
+      customer.full_name,
+      customer.baby_name || null,
+      customer.email || customer.phone || null,
+    ].filter(Boolean).join(" — "),
+  }));
+
+  return <SessionView preview={false} slot={{ id: slot.id, startsAt: slot.starts_at, variantName: variant && "name" in variant ? String(variant.name) : "Flow Mama", capacity: slot.capacity, bookedCount: slot.booked_count, status: slot.status }} bookings={bookings} otherSlots={otherSlots} existingCustomers={existingCustomers} message={message} />;
 }
 
 type SessionViewProps = {
@@ -154,10 +191,11 @@ type SessionViewProps = {
   slot: { id: string; startsAt: string; variantName: string; capacity: number; bookedCount: number; status: string };
   bookings: Array<{ id: string; name: string; email: string; phone: string; baby: string; payment: string; bookingSummary: string }>;
   otherSlots: Array<{ id: string; label: string }>;
+  existingCustomers: Array<{ id: string; label: string }>;
   message: { result?: string; error?: string };
 };
 
-function SessionView({ preview, slot, bookings, otherSlots, message }: SessionViewProps) {
+function SessionView({ preview, slot, bookings, otherSlots, existingCustomers, message }: SessionViewProps) {
   return (
     <main className="admin-shell">
       <AdminHeader title="Session details" eyebrow="Schedule" />
@@ -187,6 +225,19 @@ function SessionView({ preview, slot, bookings, otherSlots, message }: SessionVi
 
       <section className="admin-panel">
         <div className="admin-panel-heading"><div><p className="booking-eyebrow">Manual exception</p><h2><UserPlus size={20} /> Add a booking</h2></div></div>
+        <div className="manual-booking-subsection">
+          <h3>Choose an existing customer</h3>
+          <p>Reuse saved contact and baby details without entering them again.</p>
+          {existingCustomers.length ? (
+            <form className="manual-booking-form manual-booking-form-existing" action={addExistingCustomerBooking}>
+              <input type="hidden" name="slotId" value={slot.id} />
+              <label>Customer<select required name="customerId" disabled={preview}><option value="">Select a customer…</option>{existingCustomers.map((customer) => <option key={customer.id} value={customer.id}>{customer.label}</option>)}</select></label>
+              <label>Payment<select name="paymentType" disabled={preview}><option value="payment_due">Payment due</option><option value="bank_transfer">Bank transfer</option><option value="cash">Cash</option><option value="complimentary">Complimentary</option></select></label>
+              <button className="pay-button" disabled={preview || slot.bookedCount >= slot.capacity || slot.status === "cancelled"}>Add existing customer</button>
+            </form>
+          ) : <p className="admin-empty">No saved customers yet. Add the first customer below.</p>}
+        </div>
+        <div className="manual-booking-divider"><span>or add someone new</span></div>
         <form className="manual-booking-form" action={addManualBooking}>
           <input type="hidden" name="slotId" value={slot.id} />
           <label>Name<input required name="fullName" disabled={preview} /></label>

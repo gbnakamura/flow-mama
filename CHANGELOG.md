@@ -24,6 +24,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 - Plain-text fallbacks for transactional booking emails.
 - Production and Preview integrations for Supabase, Stripe webhooks, and Resend.
 - A dedicated Stripe sandbox webhook and stable Vercel branch preview for end-to-end test payments.
+- An existing-customer picker for manual admin bookings, so saved contact and baby details can be reused.
 
 ### Changed
 
