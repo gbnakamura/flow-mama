@@ -82,7 +82,7 @@ export function PersonalTrainingExperience({ slots }: Props) {
       <div className="booking-intro personal-training-intro">
         <p className="booking-eyebrow">Personal training · Northfields</p>
         <h1>Choose the sessions<br /><em>that work for you.</em></h1>
-        <p className="booking-lede">Book a place in a small group or reserve the whole session for one-to-one training.</p>
+        <p className="booking-lede">Book a place in a small group or reserve the whole session for one-to-one training. Group bookings will only go ahead if more than 2 people are signed up. Confirmation emails will be sent 3 days in advance and refunds will be processed immediately if cancelled.</p>
         <div className="pt-price-overview" aria-label="Personal training prices">
           <div><span>Group training</span><strong>£30</strong><small>per person, per session</small></div>
           <div><span>1:1 training</span><strong>£50</strong><small>per session</small></div>
@@ -92,14 +92,14 @@ export function PersonalTrainingExperience({ slots }: Props) {
       <div className="booking-layout">
         <section aria-labelledby={step === "dates" ? "dates-heading" : "details-heading"}>
           {step === "dates" ? <>
-            <div className="section-heading-row"><div><p className="step-label">Step 1 of 2</p><h2 id="dates-heading">Select your sessions</h2></div><p className="cutoff-note">Bookings close at 9pm the night before</p></div>
+            <div className="section-heading-row"><div><p className="step-label">Step 1 of 2</p><h2 id="dates-heading">Select your sessions</h2></div><p className="cutoff-note">Bookings close 72 hours before each session</p></div>
             {sessions.length ? <div className="session-list pt-session-list">{sessions.map((session) => {
               const selectedMode = selected[session.id];
               const groupAvailable = session.available && session.allowedBookingModes.includes("group") && (!session.bookingMode || session.bookingMode === "group") && session.spacesRemaining > 0;
               const oneToOneAvailable = session.available && session.allowedBookingModes.includes("one_to_one") && !session.bookingMode && session.spacesRemaining > 0;
               return <article className={`session-row pt-session-row${selectedMode ? " is-selected" : ""}${!groupAvailable && !oneToOneAvailable ? " is-sold-out" : ""}`} key={session.id}>
                 <span className="date-tile" aria-hidden="true"><span>{session.day}</span><small>{session.month}</small></span>
-                <span className="session-details"><strong>{session.date}</strong><span>{session.time}</span>{session.bookingMode === "group" && <small>{session.spacesRemaining} group {session.spacesRemaining === 1 ? "place" : "places"} remaining</small>}</span>
+                <span className="session-details"><strong>{session.date}</strong><span>{session.time}</span>{session.allowedBookingModes.includes("group") && session.bookingMode !== "one_to_one" && <small>{session.spacesRemaining} group {session.spacesRemaining === 1 ? "spot" : "spots"} remaining</small>}</span>
                 <span className="pt-mode-options">
                   {session.allowedBookingModes.includes("group") && <button type="button" disabled={!groupAvailable} className={selectedMode === "group" ? "is-selected" : ""} onClick={() => choose(session.id, "group")}><span>{selectedMode === "group" && <Check size={14} />}Group</span><strong>£30</strong></button>}
                   {session.allowedBookingModes.includes("one_to_one") && <button type="button" disabled={!oneToOneAvailable} className={selectedMode === "one_to_one" ? "is-selected" : ""} onClick={() => choose(session.id, "one_to_one")}><span>{selectedMode === "one_to_one" && <Check size={14} />}1:1</span><strong>£50</strong></button>}

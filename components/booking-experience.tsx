@@ -71,6 +71,8 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [step, setStep] = useState<"dates" | "details">("dates");
   const [customer, setCustomer] = useState(emptyCustomer);
+  const [babyAgeYears, setBabyAgeYears] = useState("");
+  const [babyAgeRemainderMonths, setBabyAgeRemainderMonths] = useState("");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -110,6 +112,15 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
   function showSummary() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     summaryRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  }
+
+  function updateBabyAge(years: string, months: string) {
+    setBabyAgeYears(years);
+    setBabyAgeRemainderMonths(months);
+    setCustomer((current) => ({
+      ...current,
+      babyAgeMonths: years !== "" && months !== "" ? String(Number(years) * 12 + Number(months)) : "",
+    }));
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -261,13 +272,36 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
                 </div>
                 <div className="form-pair">
                   <label>
-                    Baby’s name
+                    Baby/toddler name
                     <input required value={customer.babyName} onChange={(event) => setCustomer({ ...customer, babyName: event.target.value })} />
                   </label>
-                  <label>
-                    Baby’s age in months
-                    <input required type="number" inputMode="numeric" min="0" max="60" value={customer.babyAgeMonths} onChange={(event) => setCustomer({ ...customer, babyAgeMonths: event.target.value })} />
-                  </label>
+                  <fieldset className="age-field">
+                    <legend>Baby/toddler age</legend>
+                    <div className="age-selects">
+                      <select
+                        required
+                        aria-label="Baby or toddler age in years"
+                        value={babyAgeYears}
+                        onChange={(event) => {
+                          const years = event.target.value;
+                          updateBabyAge(years, years === "5" ? "0" : babyAgeRemainderMonths);
+                        }}
+                      >
+                        <option value="">Years</option>
+                        {Array.from({ length: 6 }, (_, year) => <option key={year} value={year}>{year} {year === 1 ? "year" : "years"}</option>)}
+                      </select>
+                      <select
+                        required
+                        aria-label="Baby or toddler additional months"
+                        value={babyAgeRemainderMonths}
+                        onChange={(event) => updateBabyAge(babyAgeYears, event.target.value)}
+                        disabled={babyAgeYears === "5"}
+                      >
+                        <option value="">Months</option>
+                        {Array.from({ length: 12 }, (_, month) => <option key={month} value={month}>{month} {month === 1 ? "month" : "months"}</option>)}
+                      </select>
+                    </div>
+                  </fieldset>
                 </div>
                 <label className="consent-row">
                   <input required type="checkbox" checked={termsAccepted} onChange={(event) => setTermsAccepted(event.target.checked)} />

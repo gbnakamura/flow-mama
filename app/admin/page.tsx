@@ -21,13 +21,13 @@ const demoOrders: AdminOrder[] = [
 const dateFormatter = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", hour12: false });
 
 type AdminPageProps = {
-  searchParams: Promise<{ programme?: string }>;
+  searchParams: Promise<{ programme?: string; result?: string }>;
 };
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
   const admin = await requireAdmin();
   const configured = !admin.preview;
-  const { programme: programmeParam } = await searchParams;
+  const { programme: programmeParam, result } = await searchParams;
   const programme = parseAdminProgrammeFilter(programmeParam);
 
   const { slots, orders } = configured ? await loadAdminDashboard() : { slots: demoSlots, orders: demoOrders };
@@ -43,6 +43,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
     <main className="admin-shell">
       <AdminHeader title="Bookings at a glance" programme={programme} />
       {!configured && <p className="admin-demo-note">Preview data — connect Supabase to enable live bookings and secure sign-in.</p>}
+      {result === "session-deleted" && <p className="admin-success">Session deleted permanently.</p>}
       <div className="admin-programme-filter-bar"><AdminProgrammeFilter basePath="/admin" value={programme} /></div>
 
       <section className="admin-stats" aria-label="Booking summary">
@@ -53,9 +54,9 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
       <section className="admin-panel">
         <div className="admin-panel-heading"><div><p className="booking-eyebrow">Schedule</p><h2>Upcoming sessions</h2></div></div>
-        <div className="admin-table-wrap"><table><thead><tr><th>Date</th><th>Session</th><th>Booked</th><th>Spaces</th><th>Status</th></tr></thead><tbody>
-          {upcoming.map((slot) => <tr key={slot.id}><td><a className="admin-row-link" href={`/admin/sessions/${slot.id}`}>{dateFormatter.format(new Date(slot.startsAt))}</a></td><td>{slot.variantName}<small>{adminProgrammeLabel(slot.programmeSlug)}{slot.allowedBookingModes.length > 0 ? ` · ${slot.bookingMode === "one_to_one" ? "Locked to 1:1" : slot.bookingMode === "group" ? "Locked to group" : slot.allowedBookingModes.length === 2 ? "Group + 1:1" : slot.allowedBookingModes[0] === "one_to_one" ? "1:1 only" : "Group only"}` : ""}</small></td><td>{slot.bookedCount} / {slot.bookingMode === "one_to_one" ? 1 : slot.capacity}</td><td>{slot.bookingMode === "one_to_one" ? 0 : Math.max(0, slot.capacity - slot.bookedCount)}</td><td><span className={slot.status === "cancelled" || slot.bookedCount >= slot.capacity || slot.bookingMode === "one_to_one" ? "admin-badge sold" : "admin-badge"}>{slot.status === "cancelled" ? "Cancelled" : slot.bookingMode === "one_to_one" ? "1:1 booked" : slot.bookedCount >= slot.capacity ? "Full" : slot.bookingMode === "group" ? "Group open" : "Open"}</span></td></tr>)}
-          {!upcoming.length && <tr><td colSpan={5}>No upcoming sessions match this filter.</td></tr>}
+        <div className="admin-table-wrap"><table><thead><tr><th>Date</th><th>Session</th><th>Booked</th><th>Status</th></tr></thead><tbody>
+          {upcoming.map((slot) => <tr key={slot.id}><td><a className="admin-row-link" href={`/admin/sessions/${slot.id}`}>{dateFormatter.format(new Date(slot.startsAt))}</a></td><td>{slot.variantName}<small>{adminProgrammeLabel(slot.programmeSlug)}{slot.allowedBookingModes.length > 0 ? ` · ${slot.bookingMode === "one_to_one" ? "Locked to 1:1" : slot.bookingMode === "group" ? "Locked to group" : slot.allowedBookingModes.length === 2 ? "Group + 1:1" : slot.allowedBookingModes[0] === "one_to_one" ? "1:1 only" : "Group only"}` : ""}</small></td><td>{slot.bookedCount} / {slot.bookingMode === "one_to_one" ? 1 : slot.capacity}</td><td><span className={slot.status === "cancelled" || slot.bookedCount >= slot.capacity || slot.bookingMode === "one_to_one" ? "admin-badge sold" : "admin-badge"}>{slot.status === "cancelled" ? "Cancelled" : slot.bookingMode === "one_to_one" ? "1:1 booked" : slot.bookedCount >= slot.capacity ? "Full" : slot.bookingMode === "group" ? "Group open" : "Open"}</span></td></tr>)}
+          {!upcoming.length && <tr><td colSpan={4}>No upcoming sessions match this filter.</td></tr>}
         </tbody></table></div>
       </section>
 

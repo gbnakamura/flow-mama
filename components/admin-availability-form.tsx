@@ -30,7 +30,11 @@ export function AdminAvailabilityForm({
   createRecurringAction,
 }: AdminAvailabilityFormProps) {
   const [scheduleType, setScheduleType] = useState<"one-off" | "recurring">("one-off");
+  const [selectedProgrammeId, setSelectedProgrammeId] = useState(defaultProgrammeId ?? programmes[0]?.id ?? "");
   const recurring = scheduleType === "recurring";
+  const selectedProgramme = programmes.find((programme) => programme.id === selectedProgrammeId);
+  const isFlowMama = selectedProgramme?.slug === "flow-mama-autumn-2026";
+  const isPersonalTraining = selectedProgramme?.slug === "group-personal-training";
 
   return (
     <section className="admin-panel admin-form-panel">
@@ -65,8 +69,14 @@ export function AdminAvailabilityForm({
 
       <form className="admin-form-grid" action={recurring ? createRecurringAction : createOneOffAction}>
         <label>Business<input value="Flow Mama" disabled /></label>
-        <label>Programme<select required name="programmeId" defaultValue={defaultProgrammeId} disabled={preview}>{programmes.map((programme) => <option key={programme.id} value={programme.id}>{programme.name}</option>)}</select></label>
-        <label>Session name<input required name="sessionName" defaultValue="Personal Training" placeholder="Early Flow" disabled={preview} /></label>
+        <label>Programme<select required name="programmeId" value={selectedProgrammeId} onChange={(event) => setSelectedProgrammeId(event.target.value)} disabled={preview}>{programmes.map((programme) => <option key={programme.id} value={programme.id}>{programme.name}</option>)}</select></label>
+        {isFlowMama ? (
+          <label>Session type<select required name="sessionName" defaultValue="Early Flow" disabled={preview}><option value="Early Flow">Early Flow</option><option value="Late Flow">Late Flow</option></select></label>
+        ) : isPersonalTraining ? (
+          <label>Session type<input value="Personal Training" disabled /><input type="hidden" name="sessionName" value="Personal Training" /></label>
+        ) : (
+          <label>Session name<input required name="sessionName" placeholder="Session name" disabled={preview} /></label>
+        )}
 
         {recurring ? (
           <>

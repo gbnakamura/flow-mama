@@ -108,6 +108,28 @@ async function cancelSession(formData: FormData) {
   redirect(`/admin/sessions/${slotId}?result=cancelled`);
 }
 
+async function deleteSession(formData: FormData) {
+  "use server";
+  const admin = await requireAdmin();
+  const slotId = String(formData.get("slotId") ?? "");
+  if (admin.preview) redirect(`/admin/sessions/${slotId}?error=delete`);
+  if (formData.get("confirmDelete") !== "yes") redirect(`/admin/sessions/${slotId}?error=confirm-delete`);
+
+  const { data, error } = await createSupabaseAdmin().rpc("delete_empty_session", {
+    p_slot_id: slotId,
+    p_admin_email: admin.email,
+  });
+  if (error || !data?.ok) {
+    const reason = data?.reason === "session_has_history" ? "delete-history" : "delete";
+    redirect(`/admin/sessions/${slotId}?error=${reason}`);
+  }
+
+  revalidatePath("/admin");
+  revalidatePath("/book");
+  revalidatePath("/personal-training");
+  redirect("/admin?result=session-deleted");
+}
+
 export default async function SessionDetailPage({ params, searchParams }: SessionPageProps) {
   const { id } = await params;
   const message = await searchParams;
@@ -229,7 +251,14 @@ function SessionView({ preview, slot, bookings, otherSlots, existingCustomers, m
       </div>
       {preview && <p className="admin-demo-note">Preview data — actions become available after Supabase is connected.</p>}
       {message.result && <p className="admin-success">Booking {message.result} successfully.</p>}
-      {message.error && <p className="form-error">{message.error === "full" ? "That class is now full." : message.error === "add" ? "The booking could not be added. Please check the details and try again." : "That change could not be completed. The destination may now be full."}</p>}
+      {message.error && <p className="form-error">{
+        message.error === "full" ? "That class is now full."
+          : message.error === "add" ? "The booking could not be added. Please check the details and try again."
+          : message.error === "delete-history" ? "This session has booking history and cannot be permanently deleted. Cancel it instead so the customer and payment records remain intact."
+          : message.error === "confirm-delete" ? "Confirm that you understand permanent deletion cannot be undone."
+          : message.error === "delete" ? "The session could not be deleted. It may already have booking or checkout history."
+          : "That change could not be completed. The destination may now be full."
+      }</p>}
 
       <section className="admin-panel">
         <div className="admin-panel-heading"><div><p className="booking-eyebrow">Attendees</p><h2>Current roster</h2></div></div>
@@ -280,6 +309,15 @@ function SessionView({ preview, slot, bookings, otherSlots, existingCustomers, m
         <div className="admin-panel-heading"><div><p className="booking-eyebrow">Session management</p><h2>Cancel this entire session</h2></div><p>This removes the session from public booking. Existing attendees remain listed so you can move or refund them individually.</p></div>
         <form action={cancelSession}><input type="hidden" name="slotId" value={slot.id} /><label><input required type="checkbox" name="confirm" value="yes" /> I understand that refunds are handled separately in Stripe.</label><button className="danger-button" disabled={preview}>Cancel session</button></form>
       </section>}
+
+      <section className="admin-panel admin-danger-panel">
+        <div className="admin-panel-heading"><div><p className="booking-eyebrow">Permanent deletion</p><h2>Delete this session</h2></div><p>Use this for test or accidental sessions. A session with any booking or checkout history cannot be deleted and must be cancelled instead.</p></div>
+        <form action={deleteSession}>
+          <input type="hidden" name="slotId" value={slot.id} />
+          <label><input required type="checkbox" name="confirmDelete" value="yes" /> I understand this permanently deletes the session and cannot be undone.</label>
+          <button className="danger-button" disabled={preview || slot.bookedCount > 0}>Delete session</button>
+        </form>
+      </section>
     </main>
   );
 }

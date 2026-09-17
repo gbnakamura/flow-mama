@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type Stripe from "stripe";
+import { isBeforePersonalTrainingCutoff } from "@/lib/personal-training-booking";
 import { getStripe } from "@/lib/stripe";
 import { createSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase/admin";
 import { personalTrainingCheckoutSchema } from "@/lib/validation/personal-training-checkout";
@@ -28,11 +29,11 @@ export async function POST(request: Request) {
   const slotIds = input.selections.map((selection) => selection.slotId);
   const { data: rows, error: availabilityError } = await supabase
     .from("public_availability")
-    .select("id, programme_slug, available, allowed_booking_modes, booking_mode, capacity, booked_count")
+    .select("id, programme_slug, starts_at, available, allowed_booking_modes, booking_mode, capacity, booked_count")
     .in("id", slotIds);
 
   if (availabilityError) return NextResponse.json({ error: "We couldn't confirm availability." }, { status: 503 });
-  if (rows?.length !== slotIds.length || rows.some((row) => row.programme_slug !== "group-personal-training" || !row.available)) {
+  if (rows?.length !== slotIds.length || rows.some((row) => row.programme_slug !== "group-personal-training" || !row.available || !isBeforePersonalTrainingCutoff(row.starts_at))) {
     return NextResponse.json({ error: "One of those sessions is no longer available. Please choose again." }, { status: 409 });
   }
 

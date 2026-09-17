@@ -1,6 +1,7 @@
 import "server-only";
 
 import { DEMO_AVAILABILITY } from "@/lib/demo-data";
+import { isBeforePersonalTrainingCutoff } from "@/lib/personal-training-booking";
 import { createSupabaseAdmin, isSupabaseConfigured } from "@/lib/supabase/admin";
 import type { AvailabilitySlot, PersonalTrainingAvailabilitySlot } from "@/lib/types";
 
@@ -62,7 +63,7 @@ export async function listPersonalTrainingAvailability(): Promise<PersonalTraini
     variantName: row.variant_name,
     startsAt: row.starts_at,
     endsAt: row.ends_at,
-    available: row.available,
+    available: row.available && isBeforePersonalTrainingCutoff(row.starts_at),
     allowedBookingModes: row.allowed_booking_modes ?? [],
     bookingMode: row.booking_mode ?? null,
     spacesRemaining: Math.max(0, (row.capacity ?? 0) - (row.booked_count ?? 0)),

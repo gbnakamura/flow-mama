@@ -255,9 +255,9 @@ a { color: inherit; }
 .details-heading h2 { margin: 0; font-family: var(--display); font-size: clamp(1.8rem, 3vw, 2.4rem); }
 .details-lede { margin: 10px 0 28px; color: var(--ink-soft); }
 .details-form { display: grid; gap: 20px; }
-.details-form > label, .form-pair label { display: grid; gap: 7px; font-size: 0.86rem; font-weight: 600; }
+.details-form > label, .form-pair label, .age-field { display: grid; gap: 7px; font-size: 0.86rem; font-weight: 600; }
 
-.details-form input:not([type="checkbox"]) {
+.details-form input:not([type="checkbox"]), .details-form select {
   width: 100%;
   min-height: 49px;
   padding: 10px 13px;
@@ -268,8 +268,12 @@ a { color: inherit; }
   color: var(--ink);
 }
 
-.details-form input:not([type="checkbox"]):focus { border-color: var(--coral-deep); box-shadow: 0 0 0 3px rgba(217, 111, 96, 0.12); }
+.details-form input:not([type="checkbox"]):focus, .details-form select:focus { border-color: var(--coral-deep); box-shadow: 0 0 0 3px rgba(217, 111, 96, 0.12); }
 .form-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.age-field { min-width: 0; margin: 0; padding: 0; border: 0; }
+.age-field legend { padding: 0; }
+.age-selects { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.age-selects select:disabled { opacity: 0.65; }
 
 .details-form .consent-row {
   grid-template-columns: 20px 1fr;

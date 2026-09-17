@@ -15,11 +15,18 @@ This file records meaningful changes to the Flow Mama website and booking system
 ### Added
 
 - An Analytics tab in the admin navigation showing visitors, page views, popular pages, referral sources, device usage, paid bookings, and an estimated booking rate.
+- A permanent session-delete action in the admin portal for unused test or accidental sessions, while protecting sessions with booking or checkout history.
 
 ### Changed
 
 - Added privacy-conscious Vercel traffic collection while excluding admin, authentication, and booking-success pages.
 - Updated site analytics with an interactive daily visitors and page-views graph inspired by the Vercel dashboard.
+- Simplified the upcoming-sessions table by showing capacity within the booked total and removing the redundant spaces column.
+- Updated the booking details form to refer to babies and toddlers inclusively.
+- Replaced the baby or toddler numeric age field with separate years and months dropdowns.
+- Replaced free-text session naming with consistent Early Flow, Late Flow, and Personal Training options when creating availability.
+- Changed Personal Training bookings to close exactly 72 hours before each session and clarified the group confirmation and refund process.
+- Added a live remaining-spots count to every Personal Training session that is available for group bookings.
 
 ## 2026-09-17 — Booking, payments and admin system
 
