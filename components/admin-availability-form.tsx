@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CalendarDays, CalendarRange } from "lucide-react";
+import { PERSONAL_TRAINING_GROUP_CAPACITY } from "@/lib/personal-training-booking";
 
 type ProgrammeOption = {
   id: string;
@@ -90,10 +91,10 @@ export function AdminAvailabilityForm({
 
         <label>Start time<input required type="time" name="startTime" disabled={preview} /></label>
         <label>End time<input required type="time" name="endTime" disabled={preview} /></label>
-        <label>Capacity (Personal Training is fixed at 3)<input required type="number" name="capacity" min="1" max="100" defaultValue="3" disabled={preview} /></label>
+        <label>Capacity (Personal Training is fixed at {PERSONAL_TRAINING_GROUP_CAPACITY})<input required type="number" name="capacity" min="1" max="100" defaultValue={PERSONAL_TRAINING_GROUP_CAPACITY} disabled={preview} /></label>
         <label>Personal training availability<select required name="bookingAvailability" defaultValue="both" disabled={preview}><option value="both">Group + 1:1</option><option value="group">Group only</option><option value="one_to_one">1:1 only</option></select></label>
         <label className="admin-form-wide">Location<input required name="location" defaultValue={defaultLocation} disabled={preview} /></label>
-        <div className="admin-form-note admin-form-wide"><strong>Personal training availability</strong><span>For Personal Training dates, capacity is always three. A “Group + 1:1” time locks to whichever type is paid for first. The availability choice is ignored for other Flow Mama programmes.</span></div>
+        <div className="admin-form-note admin-form-wide"><strong>Personal training availability</strong><span>For Personal Training dates, group capacity is always two. A “Group + 1:1” time locks to whichever type is paid for first. The availability choice is ignored for other Flow Mama programmes.</span></div>
         <button className="pay-button admin-form-wide" disabled={preview}>Create {recurring ? "recurring sessions" : "one-off session"}</button>
       </form>
     </section>

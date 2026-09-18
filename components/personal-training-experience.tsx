@@ -82,7 +82,7 @@ export function PersonalTrainingExperience({ slots }: Props) {
       <div className="booking-intro personal-training-intro">
         <p className="booking-eyebrow">Personal training · Northfields</p>
         <h1>Choose the sessions<br /><em>that work for you.</em></h1>
-        <p className="booking-lede">Book a place in a small group or reserve the whole session for one-to-one training. Group bookings will only go ahead if more than 2 people are signed up. Confirmation emails will be sent 3 days in advance and refunds will be processed immediately if cancelled.</p>
+        <p className="booking-lede">Book a place in a small group or reserve the whole session for one-to-one training. Group bookings will only go ahead if 2 people are signed up. Confirmation emails will be sent 3 days in advance and refunds will be processed immediately if cancelled.</p>
         <div className="pt-price-overview" aria-label="Personal training prices">
           <div><span>Group training</span><strong>£30</strong><small>per person, per session</small></div>
           <div><span>1:1 training</span><strong>£50</strong><small>per session</small></div>

@@ -5,6 +5,7 @@ import { AdminAvailabilityForm } from "@/components/admin-availability-form";
 import { AdminHeader } from "@/components/admin-header";
 import { requireAdmin } from "@/lib/auth/admin";
 import { datesForWeekday, londonLocalToIso } from "@/lib/dates";
+import { PERSONAL_TRAINING_GROUP_CAPACITY } from "@/lib/personal-training-booking";
 import { createSupabaseAdmin } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
@@ -58,7 +59,7 @@ async function saveAvailability(
 
   const sessionSlug = slugify(input.sessionName);
   const isPersonalTraining = programme.slug === "group-personal-training";
-  const capacity = isPersonalTraining ? 3 : input.capacity;
+  const capacity = isPersonalTraining ? PERSONAL_TRAINING_GROUP_CAPACITY : input.capacity;
   const { data: variant, error: variantError } = await supabase
     .from("session_variants")
     .upsert({

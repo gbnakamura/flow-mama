@@ -12,6 +12,10 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
+No unreleased changes.
+
+## 2026-09-18 — Admin and booking refinements
+
 ### Added
 
 - An Analytics tab in the admin navigation showing visitors, page views, popular pages, referral sources, device usage, paid bookings, and an estimated booking rate.
@@ -28,6 +32,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 - Changed Personal Training bookings to close exactly 72 hours before each session and clarified the group confirmation and refund process.
 - Added a live remaining-spots count to every Personal Training session that is available for group bookings.
 - Removed the visible Personal Training cutoff reminder while continuing to enforce the 72-hour cutoff during booking.
+- Reduced Personal Training group sessions to a maximum of two people and updated the booking guidance accordingly.
 
 ## 2026-09-17 — Booking, payments and admin system
 

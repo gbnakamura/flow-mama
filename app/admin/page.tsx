@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 const demoSlots: AdminSlot[] = [
   { id: "demo-1", startsAt: "2026-09-21T08:20:00.000Z", variantName: "Early Flow", capacity: 8, bookedCount: 5, status: "scheduled", bookingMode: null, allowedBookingModes: [], programmeSlug: "flow-mama-autumn-2026" },
   { id: "demo-2", startsAt: "2026-09-21T10:00:00.000Z", variantName: "Late Flow", capacity: 8, bookedCount: 8, status: "scheduled", bookingMode: null, allowedBookingModes: [], programmeSlug: "flow-mama-autumn-2026" },
-  { id: "demo-3", startsAt: "2026-09-25T08:00:00.000Z", variantName: "Personal Training", capacity: 3, bookedCount: 2, status: "scheduled", bookingMode: "group", allowedBookingModes: ["group", "one_to_one"], programmeSlug: "group-personal-training" },
+  { id: "demo-3", startsAt: "2026-09-25T08:00:00.000Z", variantName: "Personal Training", capacity: 2, bookedCount: 2, status: "scheduled", bookingMode: "group", allowedBookingModes: ["group", "one_to_one"], programmeSlug: "group-personal-training" },
 ];
 
 const demoOrders: AdminOrder[] = [
