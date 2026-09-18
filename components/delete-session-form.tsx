@@ -15,14 +15,14 @@ export function DeleteSessionForm({ action, bookedCount, disabled = false, slotI
       action={action}
       onSubmit={(event) => {
         const confirmed = window.confirm(
-          `Permanently delete this session?\n\nThis will remove the session, ${attendeeLabel}, and any associated checkout selections. Customer, order and payment records will be kept.\n\nThis cannot be undone.`,
+          `Permanently delete this session?\n\nThis will remove the session, ${attendeeLabel}, and any associated checkout selections. Customer, order and payment records will be kept. No refunds will be issued automatically.\n\nThis cannot be undone.`,
         );
         if (!confirmed) event.preventDefault();
       }}
     >
       <input type="hidden" name="slotId" value={slotId} />
       <input type="hidden" name="confirmDelete" value="yes" />
-      <p>Customer, order and payment records will be retained.</p>
+      <p>Customer, order and payment records will be retained. Refunds must be handled separately in Stripe.</p>
       <button className="danger-button" disabled={disabled}>Delete session</button>
     </form>
   );

@@ -12,7 +12,9 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
-No unreleased changes.
+### Changed
+
+- Clarified that permanently deleting a booked session does not automatically issue Stripe refunds.
 
 ## 2026-09-18 — Admin and booking refinements
 
