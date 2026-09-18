@@ -2,6 +2,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { ArrowLeft, UserPlus } from "lucide-react";
 import { AdminHeader } from "@/components/admin-header";
+import { DeleteSessionForm } from "@/components/delete-session-form";
 import { requireAdmin } from "@/lib/auth/admin";
 import { createSupabaseAdmin } from "@/lib/supabase/admin";
 
@@ -115,14 +116,11 @@ async function deleteSession(formData: FormData) {
   if (admin.preview) redirect(`/admin/sessions/${slotId}?error=delete`);
   if (formData.get("confirmDelete") !== "yes") redirect(`/admin/sessions/${slotId}?error=confirm-delete`);
 
-  const { data, error } = await createSupabaseAdmin().rpc("delete_empty_session", {
+  const { data, error } = await createSupabaseAdmin().rpc("delete_session", {
     p_slot_id: slotId,
     p_admin_email: admin.email,
   });
-  if (error || !data?.ok) {
-    const reason = data?.reason === "session_has_history" ? "delete-history" : "delete";
-    redirect(`/admin/sessions/${slotId}?error=${reason}`);
-  }
+  if (error || !data?.ok) redirect(`/admin/sessions/${slotId}?error=delete`);
 
   revalidatePath("/admin");
   revalidatePath("/book");
@@ -254,7 +252,6 @@ function SessionView({ preview, slot, bookings, otherSlots, existingCustomers, m
       {message.error && <p className="form-error">{
         message.error === "full" ? "That class is now full."
           : message.error === "add" ? "The booking could not be added. Please check the details and try again."
-          : message.error === "delete-history" ? "This session has booking history and cannot be permanently deleted. Cancel it instead so the customer and payment records remain intact."
           : message.error === "confirm-delete" ? "Confirm that you understand permanent deletion cannot be undone."
           : message.error === "delete" ? "The session could not be deleted. It may already have booking or checkout history."
           : "That change could not be completed. The destination may now be full."
@@ -311,12 +308,8 @@ function SessionView({ preview, slot, bookings, otherSlots, existingCustomers, m
       </section>}
 
       <section className="admin-panel admin-danger-panel">
-        <div className="admin-panel-heading"><div><p className="booking-eyebrow">Permanent deletion</p><h2>Delete this session</h2></div><p>Use this for test or accidental sessions. A session with any booking or checkout history cannot be deleted and must be cancelled instead.</p></div>
-        <form action={deleteSession}>
-          <input type="hidden" name="slotId" value={slot.id} />
-          <label><input required type="checkbox" name="confirmDelete" value="yes" /> I understand this permanently deletes the session and cannot be undone.</label>
-          <button className="danger-button" disabled={preview || slot.bookedCount > 0}>Delete session</button>
-        </form>
+        <div className="admin-panel-heading"><div><p className="booking-eyebrow">Permanent deletion</p><h2>Delete this session</h2></div><p>This permanently removes the session and its attendance records. You’ll be asked to confirm before anything is deleted.</p></div>
+        <DeleteSessionForm action={deleteSession} bookedCount={slot.bookedCount} disabled={preview} slotId={slot.id} />
       </section>
     </main>
   );

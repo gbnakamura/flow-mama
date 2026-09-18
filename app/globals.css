@@ -466,6 +466,7 @@ a { color: inherit; }
 .admin-danger-panel { border-color: rgba(138,52,44,.25); }
 .admin-danger-panel form { padding: 4px 24px 24px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
 .admin-danger-panel form label { color: var(--ink-soft); font-size: .86rem; }
+.admin-danger-panel form p { margin: 0; color: var(--ink-soft); font-size: .86rem; }
 .admin-danger-panel .danger-button { min-height: 42px; padding: 8px 15px; border: 1px solid #b65d51; border-radius: 999px; background: white; color: #8a342c; cursor: pointer; font-weight: 600; }
 .admin-email-preview-panel { max-width: 760px; margin-left: max(0px, calc((100% - 1240px) / 2)); }
 .admin-email-preview-form { padding: 4px 24px 26px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 12px; }

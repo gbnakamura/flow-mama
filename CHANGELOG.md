@@ -12,7 +12,9 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
-No unreleased changes.
+### Changed
+
+- Allowed administrators to permanently delete sessions with bookings after a clear confirmation warning, while retaining customer, order and payment records.
 
 ## 2026-09-18 — Admin and booking refinements
 
