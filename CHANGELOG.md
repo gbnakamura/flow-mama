@@ -12,9 +12,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
-### Changed
-
-- Clarified that permanently deleting a booked session does not automatically issue Stripe refunds.
+No unreleased changes.
 
 ## 2026-09-18 — Admin and booking refinements
 
@@ -35,6 +33,7 @@ This file records meaningful changes to the Flow Mama website and booking system
 - Added a live remaining-spots count to every Personal Training session that is available for group bookings.
 - Removed the visible Personal Training cutoff reminder while continuing to enforce the 72-hour cutoff during booking.
 - Reduced Personal Training group sessions to a maximum of two people and updated the booking guidance accordingly.
+- Clarified that permanently deleting a booked session does not automatically issue Stripe refunds.
 
 ## 2026-09-17 — Booking, payments and admin system
 
