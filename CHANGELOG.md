@@ -12,16 +12,14 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
-### Changed
-
-- Allowed administrators to permanently delete sessions with bookings after a clear confirmation warning, while retaining customer, order and payment records.
+No unreleased changes.
 
 ## 2026-09-18 — Admin and booking refinements
 
 ### Added
 
 - An Analytics tab in the admin navigation showing visitors, page views, popular pages, referral sources, device usage, paid bookings, and an estimated booking rate.
-- A permanent session-delete action in the admin portal for unused test or accidental sessions, while protecting sessions with booking or checkout history.
+- A permanent session-delete action with a clear confirmation warning, including for sessions with bookings, while retaining customer, order and payment records.
 
 ### Changed
 
