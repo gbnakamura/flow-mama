@@ -12,7 +12,9 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
-No unreleased changes.
+### Fixed
+
+- Kept the mobile admin menu button anchored in the same top-right position when opening and closing the full-screen menu, with a smooth fade-and-lift transition.
 
 ## 2026-09-25 — Admin payments and mobile navigation
 
