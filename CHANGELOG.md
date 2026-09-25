@@ -12,7 +12,10 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
-No unreleased changes.
+### Added
+
+- A dedicated Payments & Bookings section in the admin area showing received online totals and every reservation alongside its class, customer, amount or manual payment method, and status.
+- A compact expandable admin menu on mobile, making every admin section easy to reach without horizontal scrolling.
 
 ## 2026-09-18 — Admin and booking refinements
 
