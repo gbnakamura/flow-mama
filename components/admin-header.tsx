@@ -15,10 +15,10 @@ export function AdminHeader({ title, eyebrow = "Admin", active = "overview", pro
     <>
       <header className="admin-header">
         <a href={`/admin${programmeQuery}`} aria-label="Flow Mama admin home"><img src="/images/logo.svg" alt="Flow Mama" /></a>
-        <div><p>{eyebrow}</p><h1>{title}</h1></div>
         <form action={signOutAdmin}><button type="submit">Sign out</button></form>
       </header>
       <AdminNavigation active={active} programme={programme} />
+      <div className="admin-page-heading"><p>{eyebrow}</p><h1>{title}</h1></div>
     </>
   );
 }
