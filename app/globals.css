@@ -350,16 +350,19 @@ a { color: inherit; }
 .admin-login-message h2 { margin: 0 0 8px; font-family: var(--display); }
 .admin-login-message p { margin: 0; color: var(--ink-soft); }
 
-.admin-shell { min-height: 100vh; padding: 28px clamp(18px, 4vw, 56px) 80px; background: #f6f2e9; }
-.admin-header { max-width: 1240px; margin: 0 auto 32px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 22px; }
+.admin-shell { position: relative; min-height: 100vh; padding: 28px clamp(18px, 4vw, 56px) 80px; background: #f6f2e9; }
+.admin-header { max-width: 1240px; margin: 0 auto 22px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 22px; }
 .admin-header img { width: auto; height: 58px; }
-.admin-header p { margin: 0; color: var(--coral-deep); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
-.admin-header h1 { margin: 2px 0 0; font-family: var(--display); font-size: clamp(1.6rem, 3vw, 2.4rem); }
 .admin-header button { padding: 9px 15px; border: 1px solid var(--line); border-radius: 999px; background: transparent; cursor: pointer; }
 .admin-header > a { display: inline-flex; }
-.admin-nav { max-width: 1240px; margin: -14px auto 28px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.admin-nav { max-width: 1240px; margin: 0 auto 22px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.admin-page-heading { max-width: 1240px; margin: 0 auto 28px; }
+.admin-page-heading p { margin: 0; color: var(--coral-deep); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+.admin-page-heading h1 { margin: 2px 0 0; font-family: var(--display); font-size: clamp(1.8rem, 3vw, 2.6rem); }
 .admin-nav-links { display: flex; align-items: center; gap: 7px; overflow-x: auto; }
 .admin-nav-toggle { display: none; }
+.admin-nav-mobile-heading { display: none; }
+.admin-nav-signout { display: none; }
 .admin-nav a { min-height: 39px; padding: 8px 12px; display: inline-flex; align-items: center; gap: 7px; border-radius: 999px; color: var(--ink-soft); font-size: 0.84rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
 .admin-nav a:hover { background: white; color: var(--ink); }
 .admin-nav a.active:not(.admin-nav-primary) { background: var(--ink); color: white; box-shadow: 0 3px 10px rgba(43, 42, 37, 0.14); }
@@ -555,14 +558,24 @@ a { color: inherit; }
   .mobile-cart-total { margin-left: auto; font-family: var(--display); font-size: 1.15rem; white-space: nowrap; }
   .mobile-cart-bar:focus-visible { outline: 3px solid color-mix(in srgb, var(--coral) 55%, white); outline-offset: 3px; }
   .booking-intro { padding-bottom: 34px; }
-  .admin-nav { margin-top: -8px; overflow: visible; }
-  .admin-nav-toggle { width: 100%; min-height: 48px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--line); border-radius: 13px; background: white; color: var(--ink); cursor: pointer; }
-  .admin-nav-toggle span { display: inline-flex; align-items: center; gap: 9px; font-weight: 700; }
-  .admin-nav-toggle small { color: var(--ink-soft); font-size: .72rem; }
-  .admin-nav-links { margin-top: 8px; padding: 8px; display: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; overflow: visible; border: 1px solid var(--line); border-radius: 15px; background: white; box-shadow: 0 12px 28px rgba(43, 42, 37, .1); }
-  .admin-nav.open .admin-nav-links { display: grid; }
-  .admin-nav a { width: 100%; min-height: 44px; border-radius: 10px; }
-  .admin-nav .admin-nav-primary { grid-column: 1 / -1; margin-left: 0; justify-content: center; }
+  .admin-header > form { display: none; }
+  .admin-nav { height: 0; margin: 0; padding: 0; border: 0; }
+  .admin-nav.open { position: fixed; z-index: 100; inset: 0; width: 100%; height: 100dvh; padding: 18px; overflow-y: auto; background: #f6f2e9; }
+  .admin-nav-toggle { position: absolute; z-index: 101; top: 28px; right: clamp(18px, 4vw, 56px); width: 46px; height: 46px; padding: 0; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: white; color: var(--ink); box-shadow: 0 5px 18px rgba(43, 42, 37, .1); cursor: pointer; }
+  .admin-nav.open .admin-nav-toggle { position: fixed; top: 18px; right: 18px; }
+  .admin-nav-toggle span { display: grid; place-items: center; font-size: 0; }
+  .admin-nav-toggle span svg { width: 21px; height: 21px; }
+  .admin-nav-toggle small { display: none; }
+  .admin-nav-links { width: min(100%, 520px); min-height: calc(100dvh - 36px); margin: 0 auto; padding: 64px 0 0; display: none; align-items: stretch; flex-direction: column; gap: 7px; overflow: visible; }
+  .admin-nav.open .admin-nav-links { display: flex; }
+  .admin-nav-mobile-heading { margin-bottom: 14px; display: block; }
+  .admin-nav-mobile-heading p { margin: 0; color: var(--coral-deep); font-size: .68rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+  .admin-nav-mobile-heading strong { display: block; margin-top: 2px; font-family: var(--display); font-size: 2rem; }
+  .admin-nav a { width: 100%; min-height: 49px; padding-inline: 15px; border-radius: 12px; }
+  .admin-nav .admin-nav-primary { margin: 5px 0 0; justify-content: center; }
+  .admin-nav-signout { margin-top: auto; padding-top: 12px; display: block; border-top: 1px solid var(--line); }
+  .admin-nav-signout button { width: 100%; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid var(--line); border-radius: 10px; background: var(--cream); color: var(--ink-soft); font: inherit; font-size: .84rem; font-weight: 600; cursor: pointer; }
+  .admin-nav-signout button:hover { background: #f8ddd6; color: #8a342c; }
   .admin-stats { grid-template-columns: 1fr; }
   .admin-programme-filter { width: 100%; }
   .admin-programme-filter a { flex: 1; justify-content: center; }
@@ -602,10 +615,8 @@ a { color: inherit; }
   .date-tile { grid-row: 1 / span 2; width: 54px; height: 58px; }
   .booking-summary { padding: 23px; border-radius: 20px; }
   .form-pair { grid-template-columns: 1fr; }
-  .admin-header { grid-template-columns: auto 1fr; }
-  .admin-header form { grid-column: 2; }
-  .admin-nav-links { grid-template-columns: 1fr; }
-  .admin-nav .admin-nav-primary { grid-column: 1; }
+  .admin-header { grid-template-columns: 1fr; }
+  .admin-header > a { justify-self: center; }
   .admin-panel-heading-split { align-items: stretch; flex-direction: column; }
   .admin-search { min-width: 100%; }
   .admin-form-grid { grid-template-columns: 1fr; }
