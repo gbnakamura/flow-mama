@@ -92,63 +92,6 @@ ul { list-style: none; }
 }
 
 /* ==========================================================================
-   LAUNCH BANNER
-   ========================================================================== */
-.banner {
-  background: var(--ink);
-  color: var(--cream);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  position: relative;
-  z-index: 41;
-  overflow: hidden;
-}
-.banner__inner {
-  max-width: var(--max);
-  margin: 0 auto;
-  padding: 10px var(--pad-x);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-.banner__dot {
-  width: 7px; height: 7px;
-  background: var(--coral);
-  border-radius: 50%;
-  animation: pulse 2s ease-in-out infinite;
-  flex-shrink: 0;
-}
-.banner__text {
-  opacity: 0.92;
-}
-.banner__text strong {
-  color: var(--coral);
-  font-weight: 500;
-}
-.banner__link {
-  color: var(--cream);
-  font-weight: 500;
-  border-bottom: 1px solid rgba(248, 239, 224, 0.4);
-  padding-bottom: 1px;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-.banner__link:hover {
-  color: var(--coral);
-  border-bottom-color: var(--coral);
-}
-
-@media (max-width: 540px) {
-  .banner__inner {
-    gap: 8px;
-    font-size: 13px;
-  }
-}
-
-/* ==========================================================================
    NAV
    ========================================================================== */
 .nav {

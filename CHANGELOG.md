@@ -16,6 +16,28 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 - Kept the mobile admin menu button anchored in the same top-right position when opening and closing the full-screen menu, with a smooth fade-and-lift transition.
 
+- Fixed missing fonts on booking pages so rounded headings and pink italic accents display correctly.
+
+### Removed
+
+- Removed the outdated September new-term announcement banner from the main website.
+
+### Changed
+
+- Matched the Flow Mama class booking heading to the main landing page typography.
+
+- Matched the Charity Stay & Play title typography to the main landing page headings.
+
+- Removed the emojis from the Charity Stay & Play page title.
+
+### Added
+
+- Added a confirmed removal action to the Stay & Play attendee list so cancelled or test reservations free a ticket again.
+
+- Added Stay & Play to the main website navigation on desktop and mobile.
+
+- A Charity Stay & Play page for 2 November at Northfields Community Centre, with 15 free tickets, each covering one adult and their children, and an admin attendee list for the hospital fundraising morning.
+
 ## 2026-09-25 — Admin payments and mobile navigation
 
 ### Added

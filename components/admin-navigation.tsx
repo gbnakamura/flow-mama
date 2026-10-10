@@ -5,7 +5,7 @@ import { BarChart3, CalendarCheck2, CalendarPlus, ChartNoAxesColumnIncreasing, L
 import { signOutAdmin } from "@/app/admin/actions";
 import type { AdminProgrammeFilter } from "@/lib/admin/programme-filter";
 
-export type AdminNavItem = "overview" | "bookings" | "customers" | "revenue" | "analytics" | "emails" | "availability";
+export type AdminNavItem = "charity" | "overview" | "bookings" | "customers" | "revenue" | "analytics" | "emails" | "availability";
 
 type AdminNavigationProps = {
   active: AdminNavItem;
@@ -58,6 +58,7 @@ export function AdminNavigation({ active, programme }: AdminNavigationProps) {
         <div className="admin-nav-mobile-heading"><p>Admin</p><strong>Menu</strong></div>
         <a className={active === "overview" ? "active" : undefined} aria-current={active === "overview" ? "page" : undefined} href={`/admin${programmeQuery}`}><LayoutDashboard size={16} /> Overview</a>
         <a className={active === "bookings" ? "active" : undefined} aria-current={active === "bookings" ? "page" : undefined} href={`/admin/bookings${programmeQuery}`}><CalendarCheck2 size={16} /> Bookings</a>
+        <a className={active === "charity" ? "active" : undefined} aria-current={active === "charity" ? "page" : undefined} href="/admin/stay-and-play"><CalendarCheck2 size={16} /> Stay &amp; Play</a>
         <a className={active === "customers" ? "active" : undefined} aria-current={active === "customers" ? "page" : undefined} href={`/admin/customers${programmeQuery}`}><Users size={16} /> Customers</a>
         <a className={active === "revenue" ? "active" : undefined} aria-current={active === "revenue" ? "page" : undefined} href={`/admin/revenue${programmeQuery}`}><ChartNoAxesColumnIncreasing size={16} /> Revenue</a>
         <a className={active === "analytics" ? "active" : undefined} aria-current={active === "analytics" ? "page" : undefined} href="/admin/analytics"><BarChart3 size={16} /> Analytics</a>

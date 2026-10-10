@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Nunito:ital,wght@0,700;0,800;1,700&display=swap");
-
 :root {
   --cream: #f8efe0;
   --cream-light: #fffaf2;
@@ -12,8 +10,8 @@
   --ink: #2b2a25;
   --ink-soft: #655f54;
   --line: rgba(43, 42, 37, 0.14);
-  --display: "Nunito", system-ui, sans-serif;
-  --body: "Jost", system-ui, sans-serif;
+  --display: var(--font-nunito), system-ui, sans-serif;
+  --body: var(--font-jost), system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -639,3 +637,15 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+.charity-copy { color: var(--ink-soft); }
+.charity-copy > p { margin: 0 0 20px; }
+.charity-copy h3 { color: var(--ink); margin: 30px 0 16px; }
+.charity-feature { padding: 18px 20px; margin-bottom: 12px; border: 1.5px solid var(--line); border-radius: 15px; background: rgba(255, 250, 242, .72); }
+.charity-feature h4 { margin: 0 0 6px; color: var(--ink); font-size: 1rem; }
+.charity-feature p { margin: 0; }
+
+.flow-mama-booking .booking-intro h1,
+.stay-and-play-booking .booking-intro h1 { font-weight: 800; line-height: 1.02; letter-spacing: -0.03em; }
+.flow-mama-booking .booking-intro h1 em,
+.stay-and-play-booking .booking-intro h1 em { font-family: var(--body); font-style: italic; font-weight: 800; color: var(--coral); }

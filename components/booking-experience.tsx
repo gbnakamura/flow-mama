@@ -155,7 +155,7 @@ export function BookingExperience({ slots }: BookingExperienceProps) {
   }
 
   return (
-    <main className="booking-shell">
+    <main className="booking-shell flow-mama-booking">
       <header className="booking-header">
         <a className="back-link" href="/">
           <ArrowLeft aria-hidden="true" size={17} />

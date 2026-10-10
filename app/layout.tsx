@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
+import { Nunito, Jost } from "next/font/google";
 import { SiteAnalytics } from "@/components/site-analytics";
 import "./globals.css";
+
+const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito", display: "swap" });
+const jost = Jost({ subsets: ["latin"], style: ["normal", "italic"], variable: "--font-jost", display: "swap" });
 
 export const metadata: Metadata = {
   title: {
@@ -23,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${nunito.variable} ${jost.variable}`}>
       <body>{children}<SiteAnalytics /></body>
     </html>
   );
