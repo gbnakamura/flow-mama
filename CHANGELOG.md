@@ -12,6 +12,10 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
+### Added
+
+- Included database setup updates for the revised Stay & Play time and free waitlist when setting up another copy of the site.
+
 ### Fixed
 
 - Kept the mobile admin menu button anchored in the same top-right position when opening and closing the full-screen menu, with a smooth fade-and-lift transition.
@@ -37,6 +41,22 @@ This file records meaningful changes to the Flow Mama website and booking system
 - Added Stay & Play to the main website navigation on desktop and mobile.
 
 - A Charity Stay & Play page for 2 November at Northfields Community Centre, with 15 free tickets, each covering one adult and their children, and an admin attendee list for the hospital fundraising morning.
+
+## 2026-10-17 — Stay & Play waitlist
+
+### Changed
+
+- Marked Charity Stay & Play as fully booked and made joining the free waitlist the only signup option.
+
+### Added
+
+- Added a free Stay & Play waitlist with the same attendee details and a separate admin list in signup order.
+
+## 2026-10-13 — Stay & Play time
+
+### Changed
+
+- Changed Charity Stay & Play on 2 November to 10:45am–12:00pm.
 
 ## 2026-09-25 — Admin payments and mobile navigation
 

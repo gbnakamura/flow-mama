@@ -649,3 +649,5 @@ a { color: inherit; }
 .stay-and-play-booking .booking-intro h1 { font-weight: 800; line-height: 1.02; letter-spacing: -0.03em; }
 .flow-mama-booking .booking-intro h1 em,
 .stay-and-play-booking .booking-intro h1 em { font-family: var(--body); font-style: italic; font-weight: 800; color: var(--coral); }
+
+.charity-waitlist-button { display: block; margin: 16px auto 0; padding: 6px; color: var(--cream); border: 0; background: transparent; text-decoration: underline; cursor: pointer; }
