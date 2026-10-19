@@ -14,6 +14,10 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ### Added
 
+- Added a MacBook setup guide, a demo preview launcher and plain-English instructions for editing and publishing the website.
+
+### Added
+
 - Included database setup updates for the revised Stay & Play time and free waitlist when setting up another copy of the site.
 
 ### Fixed

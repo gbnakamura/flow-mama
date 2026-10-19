@@ -1,61 +1,36 @@
-# Flow Mama Northfields — Website
+# Flow Mama Northfields
 
-A single-page static site for Flow Mama Northfields.
+Website, class bookings and admin tools built with Next.js, React and TypeScript, with Supabase, Stripe and Resend integrations.
 
-## What's here
+## Start here
 
-```
-flow-mama/
-├── index.html       # the whole page
-├── styles.css       # all styling
-├── script.js        # scroll reveals, mobile menu, parallax
-├── vercel.json      # Vercel deployment config
-└── images/          # optimised photos + logo
-```
+- [MacBook setup](MAC_SETUP.md): one-time installation and account checklist.
+- [Amber’s editing guide](EDITING_GUIDE.md): describe a change, check it, publish it.
 
-## Before you deploy — placeholders to fill in
-
-Open `index.html` and replace these bracketed placeholders:
-
-- `[ABOUT_BLURB]` — the About section paragraph (About Amber / Flow Mama's story)
-- `[PHONE_NUMBER]` — appears twice (in the `tel:` link and the display text)
-- `[TESTIMONIAL_1]` through `[TESTIMONIAL_4]` — the four quote blocks
-- `[Name], mum to [Baby]` — attribution under each testimonial
-
-Everything else (pricing, booking URL, times, email, Instagram) is already plugged in.
-
-## Deploying to Vercel
-
-### Option 1 — Drag & drop (easiest)
-1. Go to https://vercel.com/new
-2. Drag the entire `flow-mama` folder onto the page
-3. Click **Deploy**. Done.
-
-### Option 2 — Vercel CLI
 ```bash
-npm i -g vercel
-cd flow-mama
-vercel
+npm run setup
+npm run preview
 ```
-Follow the prompts. First run sets up the project; subsequent `vercel --prod` pushes updates.
 
-### Option 3 — Git-connected (recommended for ongoing edits)
-1. Push this folder to a GitHub repo
-2. Import the repo on Vercel
-3. Every push to `main` auto-deploys
+Open http://127.0.0.1:4173. Preview needs no secrets and disables integration credentials in its child process. Sample bookings and admin data are available; real sign-in, reservations, payments and emails are unavailable. Stop with Control-C.
 
-## Custom domain
+`npm run dev` uses normal environment configuration and can connect to real services. Use `npm run preview` for everyday editing. Restart preview after editing `.env.example` or the launcher. External links on pages still lead to their destinations.
 
-Once deployed, add your custom domain in **Project Settings → Domains** on Vercel. If you own e.g. `flowmamanorthfields.com`, point its DNS at Vercel's nameservers (they give you the exact records).
+## Where things live
 
-## Editing the site later
+- `public/index.html`, `public/styles.css`, `public/script.js`: main homepage, styling and interactions. `/` rewrites to `/index.html`.
+- `public/images/`: website photographs and logo.
+- `app/`, `components/`: booking, personal training, Stay & Play and admin pages.
+- `lib/`: database, payment, email and booking logic.
+- `supabase/migrations/`: database changes; these need a separate database release step.
+- `.env.example`: configuration names only; keep actual credentials out of Git.
 
-All content is in plain HTML — open `index.html` in any text editor and edit directly. Colours live at the top of `styles.css` as CSS variables (`--coral`, `--sage`, `--cream` etc.) so you can rebrand in seconds.
+## Checks and deployment
 
-## Tech notes
+Run `npm run typecheck` and `npm run build` before preparing a release. Follow `AGENTS.md` and update `CHANGELOG.md` as required. Build validation is separate from the local demo server: stop preview before building because both use `.next`.
 
-- Pure HTML/CSS/JS — no build step, no framework
-- Fonts: Nunito (display, Uni Neue substitute) + Jost (body, Avenir substitute) via Google Fonts
-- Images pre-optimised to ~150–360 KB each
-- Respects `prefers-reduced-motion`
-- Mobile nav, smooth scrolling, scroll-triggered reveals built in
+`vercel.json` contains hosting rules, but does not establish the connected Vercel project, production branch or account access. Confirm those in Vercel before enabling publishing. Do not assume a push is harmless: a configured production branch may deploy automatically.
+
+A hosted booking preview needs a separate Supabase database, Stripe test credentials and restricted test email delivery. The local demo admin bypass applies only in development; a production-mode hosted preview will require configured authentication. Never copy production credentials to make a preview work.
+
+See `STRIPE_SETUP.md` for existing payment setup notes.

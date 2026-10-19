@@ -6,7 +6,9 @@
     "dev": "next dev --hostname 127.0.0.1 --port 4173",
     "build": "next build",
     "start": "next start --hostname 127.0.0.1 --port 4173",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "setup": "node scripts/setup.mjs",
+    "preview": "node scripts/preview.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
