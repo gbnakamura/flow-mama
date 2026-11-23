@@ -14,10 +14,6 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ### Added
 
-- A gift voucher page available by direct link only during testing: 3 classes for £60, 6 for £96 or 10 for £140, with secure Stripe checkout and recipient details in Payments & bookings for manual emailing.
-
-### Added
-
 - Added a MacBook setup guide, a demo preview launcher and plain-English instructions for editing and publishing the website.
 
 ### Added
@@ -49,6 +45,12 @@ This file records meaningful changes to the Flow Mama website and booking system
 - Added Stay & Play to the main website navigation on desktop and mobile.
 
 - A Charity Stay & Play page for 2 November at Northfields Community Centre, with 15 free tickets, each covering one adult and their children, and an admin attendee list for the hospital fundraising morning.
+
+## 2026-11-23 — Gift voucher testing
+
+### Added
+
+- A gift voucher page available by direct link only during testing: 3 classes for £60, 6 for £96 or 10 for £140, with secure Stripe checkout and recipient details in Payments & bookings for manual emailing.
 
 ## 2026-10-17 — Stay & Play waitlist
 
