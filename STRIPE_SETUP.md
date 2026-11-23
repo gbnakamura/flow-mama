@@ -214,3 +214,11 @@ Do not create ad-hoc Payment Links for this system. The application must create 
 - [ ] Live product created or copied after testing
 - [ ] Live Product ID recorded
 - [ ] No secret keys stored in this file or committed to Git
+
+## Gift vouchers
+
+During testing, the gift voucher page is available only by direct link at `/gift-vouchers`. Homepage and navigation links are withheld, and the page requests no search indexing. Anyone with the URL can still access it. It uses the existing Stripe secret key, `APP_URL`, Supabase server configuration and signed `/api/webhooks/stripe` endpoint. Prices are fixed server-side (3 classes £60, 6 classes £96, 10 classes £140); no additional Stripe price IDs are required. The purchaser enters their own email in Stripe; the recipient details are collected before checkout and stored privately in Supabase.
+
+Before release, apply the prepared `20261123132013_gift_vouchers.sql` migration using the verified database release procedure. Do not enable checkout without the table. Confirm that the Stripe endpoint receives `checkout.session.completed` and `charge.refunded`. Voucher payments capture immediately, without reserving dates or sending booking/voucher emails. Paid purchases appear in `/admin/bookings` for manual voucher delivery; refunded purchases are labelled separately. Voucher income is displayed in that section and is not included in the existing class booking revenue totals.
+
+Use a separate test environment to check all three packs, cancellation, payment failure, signed webhook retries and refunds. Confirm that a successful payment adds exactly one recipient record to the dashboard and does not create a class reservation or send an email. Demo preview deliberately disables payments and shows a sample recipient. The migration and real payment checks are separate release prerequisites; running the local preview does not perform them.

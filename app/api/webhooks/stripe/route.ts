@@ -71,6 +71,10 @@ export async function POST(request: Request) {
 }
 
 async function fulfilCheckout(session: Stripe.Checkout.Session, eventId: string) {
+  if (session.metadata?.gift_voucher_id) {
+    await fulfilGiftVoucher(session);
+    return;
+  }
   const orderId = session.metadata?.order_id;
   const paymentIntentId = typeof session.payment_intent === "string"
     ? session.payment_intent
@@ -161,6 +165,11 @@ async function recordRefund(charge: Stripe.Charge) {
   if (!paymentIntentId) return;
 
   const supabase = createSupabaseAdmin();
+  const { error: giftRefundError } = await supabase.from("gift_vouchers").update({
+    refunded_pence: charge.amount_refunded,
+    status: charge.refunded ? "refunded" : "partially_refunded",
+  }).eq("stripe_payment_intent_id", paymentIntentId);
+  if (giftRefundError) throw new Error("Unable to record gift voucher refund.");
   await supabase
     .from("orders")
     .update({
@@ -169,4 +178,31 @@ async function recordRefund(charge: Stripe.Charge) {
       updated_at: new Date().toISOString(),
     })
     .eq("stripe_payment_intent_id", paymentIntentId);
+}
+
+async function fulfilGiftVoucher(session: Stripe.Checkout.Session) {
+  if (session.payment_status !== "paid") throw new Error("Gift voucher payment is not complete.");
+  const paymentIntentId = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent?.id;
+  if (!paymentIntentId) throw new Error("Gift voucher payment is missing.");
+  const supabase = createSupabaseAdmin();
+  const { data: voucher, error } = await supabase.from("gift_vouchers")
+    .select("id,total_pence,status,stripe_checkout_session_id")
+    .eq("id", session.metadata!.gift_voucher_id!).single();
+  if (error || !voucher) throw new Error("Gift voucher not found.");
+  if (voucher.stripe_checkout_session_id !== session.id || session.currency !== "gbp" || session.amount_total !== voucher.total_pence) {
+    throw new Error("Gift voucher payment details do not match.");
+  }
+  if (["paid", "refunded", "partially_refunded"].includes(voucher.status)) return;
+  // Reading the current charge also protects against refund events arriving first.
+  const intent = await getStripe().paymentIntents.retrieve(paymentIntentId, { expand: ["latest_charge"] });
+  if (intent.status !== "succeeded") throw new Error("Gift voucher payment has not succeeded.");
+  const charge = typeof intent.latest_charge === "object" ? intent.latest_charge : null;
+  const refunded = charge?.amount_refunded ?? 0;
+  const { error: updateError } = await supabase.from("gift_vouchers").update({
+    status: refunded >= voucher.total_pence ? "refunded" : refunded > 0 ? "partially_refunded" : "paid",
+    refunded_pence: refunded,
+    stripe_payment_intent_id: paymentIntentId,
+    purchaser_email: session.customer_details?.email ?? session.customer_email,
+  }).eq("id", voucher.id).in("status", ["pending", "payment_failed"]);
+  if (updateError) throw new Error("Unable to record paid gift voucher.");
 }

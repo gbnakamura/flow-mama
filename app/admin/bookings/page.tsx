@@ -1,3 +1,4 @@
+import { GiftVoucherBookings } from "@/components/gift-voucher-bookings";
 import { Banknote, CalendarCheck2, ReceiptText } from "lucide-react";
 import { AdminHeader } from "@/components/admin-header";
 import { AdminProgrammeFilter } from "@/components/admin-programme-filter";
@@ -182,10 +183,12 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
       <div className="admin-programme-filter-bar"><AdminProgrammeFilter basePath="/admin/bookings" value={programme} /></div>
 
       <section className="admin-stats" aria-label="Payment summary">
-        <article><Banknote /><span>Net online payments received</span><strong>£{(receivedPence / 100).toFixed(2)}</strong></article>
-        <article><ReceiptText /><span>Paid online orders</span><strong>{paidOrders.size}</strong></article>
+        <article><Banknote /><span>Net online class payments received</span><strong>£{(receivedPence / 100).toFixed(2)}</strong></article>
+        <article><ReceiptText /><span>Paid online class orders</span><strong>{paidOrders.size}</strong></article>
         <article><CalendarCheck2 /><span>Manual payments recorded</span><strong>{manualPayments}</strong></article>
       </section>
+
+      <GiftVoucherBookings preview={admin.preview} />
 
       <section className="admin-panel">
         <div className="admin-panel-heading">
