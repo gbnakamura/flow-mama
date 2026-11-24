@@ -12,6 +12,10 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
+### Changed
+
+- Made the homepage gift card shorter on mobile while keeping its width unchanged, and aligned its logo with the voucher text.
+
 ### Added
 
 - Added a MacBook setup guide, a demo preview launcher and plain-English instructions for editing and publishing the website.

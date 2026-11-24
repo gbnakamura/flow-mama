@@ -1504,6 +1504,7 @@ ul { list-style: none; }
 @media (max-width: 540px) {
   .gift-feature { padding-block: 48px; }
   .gift-feature .section__eyebrow { margin-bottom: 18px; }
-  .gift-feature__card { padding: 24px; }
+  .gift-feature__card { padding: 16px 24px; }
+  .gift-feature__heart { height: 64px; margin: 8px 0 4px; }
   .gift-feature__price { margin-block: 18px 22px; }
 }
