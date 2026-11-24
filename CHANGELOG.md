@@ -12,6 +12,10 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
+### Fixed
+
+- Fixed older cached homepage styles causing the new gift voucher section to appear unstyled, especially on returning mobile browsers.
+
 ### Added
 
 - Added a MacBook setup guide, a demo preview launcher and plain-English instructions for editing and publishing the website.
