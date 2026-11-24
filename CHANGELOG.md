@@ -14,14 +14,6 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ### Added
 
-- Added a gift voucher feature below the homepage hero, introducing class packs from £60 as a gift for a new mama.
-
-### Added
-
-- Added Gift vouchers to the desktop and mobile website navigation.
-
-### Added
-
 - Added a MacBook setup guide, a demo preview launcher and plain-English instructions for editing and publishing the website.
 
 ### Added
@@ -53,6 +45,13 @@ This file records meaningful changes to the Flow Mama website and booking system
 - Added Stay & Play to the main website navigation on desktop and mobile.
 
 - A Charity Stay & Play page for 2 November at Northfields Community Centre, with 15 free tickets, each covering one adult and their children, and an admin attendee list for the hospital fundraising morning.
+
+## 2026-11-24 — Gift vouchers on the homepage
+
+### Added
+
+- Added a gift voucher feature below the homepage hero, introducing class packs from £60 as a gift for a new mama.
+- Added Gift vouchers to the desktop and mobile website navigation.
 
 ## 2026-11-23 — Gift voucher testing
 
