@@ -12,10 +12,6 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ## Unreleased
 
-### Fixed
-
-- Fixed older cached homepage styles causing the new gift voucher section to appear unstyled, especially on returning mobile browsers.
-
 ### Added
 
 - Added a MacBook setup guide, a demo preview launcher and plain-English instructions for editing and publishing the website.
@@ -51,6 +47,10 @@ This file records meaningful changes to the Flow Mama website and booking system
 - A Charity Stay & Play page for 2 November at Northfields Community Centre, with 15 free tickets, each covering one adult and their children, and an admin attendee list for the hospital fundraising morning.
 
 ## 2026-11-24 — Gift vouchers on the homepage
+
+### Fixed
+
+- Fixed older cached homepage styles causing the new gift voucher section to appear unstyled, especially on returning mobile browsers.
 
 ### Added
 
