@@ -14,6 +14,14 @@ This file records meaningful changes to the Flow Mama website and booking system
 
 ### Added
 
+- Added a gift voucher feature below the homepage hero, introducing class packs from £60 as a gift for a new mama.
+
+### Added
+
+- Added Gift vouchers to the desktop and mobile website navigation.
+
+### Added
+
 - Added a MacBook setup guide, a demo preview launcher and plain-English instructions for editing and publishing the website.
 
 ### Added
